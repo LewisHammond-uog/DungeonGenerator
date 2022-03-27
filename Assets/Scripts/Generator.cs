@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Generator : MonoBehaviour
 {
-    private BSPTreeNode treeNode;
+    private BSPTree tree;
 
     [SerializeField] private int numberOfItterations = 10;
 
-    [SerializeField] private Vector2 minRoomSize;
+    [SerializeField] private Vector2Int dungeonSize;
+    [SerializeField] private Vector2Int minRoomSize;
     
     // Start is called before the first frame update
     void Start()
@@ -17,24 +18,23 @@ public class Generator : MonoBehaviour
     }
     private void GenerateSpace()
     {
-        RectInt rect = new RectInt(0, 0, 1000, 1000);
-        treeNode = new BSPTreeNode(rect);
-        treeNode = treeNode.Split(numberOfItterations, rect);
+        tree = new BSPTree(numberOfItterations, dungeonSize, minRoomSize);
     }
     
-    
-    void OnDrawGizmos ()
+    #if UNITY_EDITOR
+    private void OnDrawGizmos ()
     {
         DebugDrawBsp();
     }
 
-    public void DebugDrawBsp () {
-        if (treeNode == null) return; // hasn't been generated yet
+    private void DebugDrawBsp () {
+        if (tree == null) return; // hasn't been generated yet
+        if (tree.rootNode == null) return; // hasn't been generated yet
 
-        DebugDrawBspNode (treeNode); // recursive call
+        DebugDrawBspNode (tree.rootNode); // recursive call
     }
 
-    public void DebugDrawBspNode (BSPTreeNode node) {
+    private void DebugDrawBspNode (BSPTreeNode node) {
         // Container
         Gizmos.color = Color.green;
         // top
@@ -50,5 +50,6 @@ public class Generator : MonoBehaviour
         if (node.left != null) DebugDrawBspNode (node.left);
         if (node.right != null) DebugDrawBspNode (node.right);
     }
+    #endif
     
 }

@@ -2,16 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class BSPTreeNode
 {
     public RectInt container;
-    public RectInt room;
     public BSPTreeNode parent;
     public BSPTreeNode left;
     public BSPTreeNode right;
 
-    public Vector2Int minSize = new Vector2Int(250, 250);
-    
+    //The minium size to allow a split
+    private static Vector2Int MinSplitSize;
+    public static Vector2Int MinRoomSize
+    {
+        set
+        {
+            MinSplitSize = new Vector2Int((int)(value.x / MinSplitRatio), (int)(value.y / MinSplitRatio));
+        }
+    }
+
+    private const float MinSplitRatio = 0.25f;
+    private const float MaxSplitRatio = 0.5f;
+
     public BSPTreeNode(RectInt container)
     {
         this.container = container;
@@ -42,6 +53,11 @@ public class BSPTreeNode
         return treeNode;
     }
 
+    /// <summary>
+    /// Split a room container in to 2 containers
+    /// </summary>
+    /// <param name="container">Container to split</param>
+    /// <returns></returns>
     private RectInt[] SplitContainer(RectInt container)
     {
         RectInt c1, c2;
@@ -54,19 +70,18 @@ public class BSPTreeNode
             direction = SplitDirection.Horizontal;
         }
 
-        const float minSplitSize = 0.25f;
-        const float maxSplitSize = 0.5f;
+
         
         if (direction == SplitDirection.Vertical)
         {
             c1 = new RectInt (container.x, container.y,
-                container.width, (int) UnityEngine.Random.Range(container.height * minSplitSize, container.height * maxSplitSize));
+                container.width, (int) UnityEngine.Random.Range(container.height * MinSplitRatio, container.height * MaxSplitRatio));
             c2 = new RectInt (container.x, container.y + c1.height,
                 container.width, container.height - c1.height);
         }else
         {
             c1 = new RectInt (container.x, container.y,
-                (int) UnityEngine.Random.Range (container.width * minSplitSize, container.width * maxSplitSize), container.height);
+                (int) UnityEngine.Random.Range (container.width * MinSplitRatio, container.width * MaxSplitRatio), container.height);
             c2 = new RectInt (container.x + c1.width, container.y,
                 container.width - c1.width, container.height);
         }
@@ -74,9 +89,14 @@ public class BSPTreeNode
         return new RectInt[] {c1, c2};
     }
 
+    /// <summary>
+    /// Is this container less than the minimum allowed size
+    /// </summary>
+    /// <param name="container"></param>
+    /// <returns></returns>
     private bool IsContainerGreaterThanMinSize(RectInt container)
     {
-        return container.size.x > minSize.x && container.size.y > minSize.y;
+        return container.size.x > MinSplitSize.x && container.size.y > MinSplitSize.y;
     }
 }
 
