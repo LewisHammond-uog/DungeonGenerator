@@ -17,7 +17,7 @@ public class BSPTreeNode
         set => minSplitSize = new Vector2Int((int)(value.x / MinSplitRatio), (int)(value.y / MinSplitRatio));
     }
 
-    private const float MinSplitRatio = 0.25f;
+    private const float MinSplitRatio = 0.3f;
     private const float MaxSplitRatio = 0.5f;
 
     public BSPTreeNode(RectInt container)
@@ -40,11 +40,25 @@ public class BSPTreeNode
             treeNode.left = Split(numberOfIterations - 1, splitContainers[0]);
             treeNode.left.parent = this;
         }
+        else
+        {
+            treeNode.left = new BSPTreeNode(splitContainers[0])
+            {
+                parent = this
+            };
+        }
 
         if (IsContainerGreaterThanMinSize(splitContainers[1]))
         {
             treeNode.right = Split(numberOfIterations - 1, splitContainers[1]);
             treeNode.right.parent = this;
+        }
+        else
+        {
+            treeNode.right = new BSPTreeNode(splitContainers[1])
+            {
+                parent = this
+            };
         }
         
         return treeNode;

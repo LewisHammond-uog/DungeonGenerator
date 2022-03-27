@@ -10,6 +10,8 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private Vector2Int dungeonSize;
     [SerializeField] private Vector2Int minRoomSize;
+
+    [SerializeField] private GameObject roomPrefab;
     
     // Start is called before the first frame update
     void Start()
@@ -20,9 +22,23 @@ public class Generator : MonoBehaviour
     private void GenerateSpace()
     {
         tree = new BSPTree(numberOfItterations, dungeonSize, minRoomSize);
+        GenerateRooms();
+    }
+
+    private void GenerateRooms()
+    {
+        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
+        tree.GetLeafNodes(ref leafNodes);
+
+        foreach (BSPTreeNode node in leafNodes)
+        {
+            GameObject obj = Instantiate(roomPrefab);
+            obj.transform.position = node.container.center;
+        }
+
     }
     
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void OnDrawGizmos ()
     {
         DebugDrawBsp();
@@ -32,7 +48,13 @@ public class Generator : MonoBehaviour
         if (tree == null) return; // hasn't been generated yet
         if (tree.RootNode == null) return; // hasn't been generated yet
 
-        DebugDrawBspNode (tree.RootNode); // recursive call
+        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
+        tree.GetLeafNodes(ref leafNodes);
+
+        foreach (BSPTreeNode node in leafNodes)
+        {
+            DebugDrawBspNode (node); 
+        }
     }
 
     private void DebugDrawBspNode (BSPTreeNode node) {
@@ -51,6 +73,6 @@ public class Generator : MonoBehaviour
         if (node.left != null) DebugDrawBspNode (node.left);
         if (node.right != null) DebugDrawBspNode (node.right);
     }
-    #endif
+#endif
     
 }

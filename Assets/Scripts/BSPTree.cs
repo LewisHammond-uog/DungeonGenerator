@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class BSPTree
 {
@@ -41,5 +42,35 @@ public class BSPTree
 
         //Return highest, +1 so it is not zero indexed
         return Mathf.Max(lHeight, rHeight) + 1;
+    }
+
+    public void GetLeafNodes(ref List<BSPTreeNode> leafNodes)
+    {
+        GetLeafNodes(RootNode, ref leafNodes);
+    }
+    
+    public static void GetLeafNodes(BSPTreeNode root, ref List<BSPTreeNode> leafNodes)
+    {
+        if (root == null)
+        {
+            return;
+        }
+        
+        //If both nodes are null then this is a leaf
+        if (root.left == null && root.right == null)
+        {
+            leafNodes.Add(root);
+        }
+        
+        //If left or right exists, recurse these nodes
+        if (root.left != null)
+        {
+            GetLeafNodes(root.left, ref leafNodes);
+        }
+
+        if (root.right != null)
+        {
+            GetLeafNodes(root.right, ref leafNodes);
+        }
     }
 }
