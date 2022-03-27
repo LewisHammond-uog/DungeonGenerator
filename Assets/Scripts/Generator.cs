@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Generator : MonoBehaviour
 {
-    private BSPTree tree;
+    private BSPTreeNode treeNode;
 
     [SerializeField] private int numberOfItterations = 10;
+
+    [SerializeField] private Vector2 minRoomSize;
     
     // Start is called before the first frame update
     void Start()
@@ -16,8 +18,8 @@ public class Generator : MonoBehaviour
     private void GenerateSpace()
     {
         RectInt rect = new RectInt(0, 0, 1000, 1000);
-        tree = new BSPTree(rect);
-        tree = tree.Split(numberOfItterations, rect);
+        treeNode = new BSPTreeNode(rect);
+        treeNode = treeNode.Split(numberOfItterations, rect);
     }
     
     
@@ -27,12 +29,12 @@ public class Generator : MonoBehaviour
     }
 
     public void DebugDrawBsp () {
-        if (tree == null) return; // hasn't been generated yet
+        if (treeNode == null) return; // hasn't been generated yet
 
-        DebugDrawBspNode (tree); // recursive call
+        DebugDrawBspNode (treeNode); // recursive call
     }
 
-    public void DebugDrawBspNode (BSPTree node) {
+    public void DebugDrawBspNode (BSPTreeNode node) {
         // Container
         Gizmos.color = Color.green;
         // top
