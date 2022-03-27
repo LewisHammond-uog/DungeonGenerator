@@ -15,6 +15,7 @@ public class Generator : MonoBehaviour
     void Start()
     {
         GenerateSpace();
+        GetComponent<BSPGraphVisualizer>().LevelBasedSearch(tree);
     }
     private void GenerateSpace()
     {
@@ -29,9 +30,9 @@ public class Generator : MonoBehaviour
 
     private void DebugDrawBsp () {
         if (tree == null) return; // hasn't been generated yet
-        if (tree.rootNode == null) return; // hasn't been generated yet
+        if (tree.RootNode == null) return; // hasn't been generated yet
 
-        DebugDrawBspNode (tree.rootNode); // recursive call
+        DebugDrawBspNode (tree.RootNode); // recursive call
     }
 
     private void DebugDrawBspNode (BSPTreeNode node) {

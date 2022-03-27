@@ -11,13 +11,10 @@ public class BSPTreeNode
     public BSPTreeNode right;
 
     //The minium size to allow a split
-    private static Vector2Int MinSplitSize;
+    private static Vector2Int minSplitSize;
     public static Vector2Int MinRoomSize
     {
-        set
-        {
-            MinSplitSize = new Vector2Int((int)(value.x / MinSplitRatio), (int)(value.y / MinSplitRatio));
-        }
+        set => minSplitSize = new Vector2Int((int)(value.x / MinSplitRatio), (int)(value.y / MinSplitRatio));
     }
 
     private const float MinSplitRatio = 0.25f;
@@ -70,8 +67,6 @@ public class BSPTreeNode
             direction = SplitDirection.Horizontal;
         }
 
-
-        
         if (direction == SplitDirection.Vertical)
         {
             c1 = new RectInt (container.x, container.y,
@@ -96,7 +91,7 @@ public class BSPTreeNode
     /// <returns></returns>
     private bool IsContainerGreaterThanMinSize(RectInt container)
     {
-        return container.size.x > MinSplitSize.x && container.size.y > MinSplitSize.y;
+        return container.size.x > minSplitSize.x && container.size.y > minSplitSize.y;
     }
 }
 
