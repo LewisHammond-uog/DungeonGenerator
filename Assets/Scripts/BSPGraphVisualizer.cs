@@ -1,83 +1,68 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class BSPGraphVisualizer : MonoBehaviour
 {
-    [SerializeField] private GameObject canvasParent;
-    [SerializeField] private GameObject layerPrefab;
+    [SerializeField] private Transform canvasParent;
+    [SerializeField] private GameObject itemPrefab;
+
+    private int index;
+
+    //https://www.freecodecamp.org/news/binarytreeviewer-with-c-c-css-html-by-gilad-bar-ilan/
     
-    public void Start()
+    /// <summary>
+    /// Draw a tree
+    /// </summary>
+    /// <param name="treeRoot"></param>
+    /// <param name="pos"></param>
+    public IEnumerator DrawTree(BSPTreeNode treeRoot, Vector2 pos)
     {
+        yield return null;
         
-    }
-
-    public void DrawTree(BSPTree tree)
-    {
-        Dictionary<int, List<BSPTreeNode>> nodesPerLevel = LevelBasedSearch(tree);
-
-        int currentLevel = 0;
-        int nodeIndex = 0;
-        while (nodesPerLevel.ContainsKey(currentLevel))
-        {
-            //Create a new row
-            GameObject row = Instantiate(layerPrefab,canvasParent.transform);
-            RowVisualizer rowVis = row.GetComponent<RowVisualizer>();
-            
-            List<BSPTreeNode> nodesInLevel = nodesPerLevel[currentLevel];
-            foreach (BSPTreeNode node in nodesInLevel)
-            {
-                string nodeLetter = GetNodeLetter(nodeIndex);
-                
-                //Add item to row
-                rowVis.AddItem(nodeLetter);
-                
-                nodeIndex++;
-            }
-
-            currentLevel++;
-        }
-
-    }
-    
-
-    public Dictionary<int, List<BSPTreeNode>> LevelBasedSearch(BSPTree tree)
-    {
-        Dictionary<int, List<BSPTreeNode>> nodesPerLevel = new Dictionary<int, List<BSPTreeNode>>();   
-
-        int height = tree.GetHeight();
-
-        for (int i = 0; i < height; ++i)
-        {
-            List<BSPTreeNode> nodes = new List<BSPTreeNode>();
-            GetNodesOfCurrentLevel(tree.RootNode, i, ref nodes);
-            nodesPerLevel.Add(i, nodes);
-        }
-
-        return nodesPerLevel;
-    }
-    
-    
-    public void GetNodesOfCurrentLevel(BSPTreeNode root, int level, ref List<BSPTreeNode> levelList)
-    {
-        if (root == null)
-        {
-            return;
-        }
+        //Draw the head of the tree
+        DrawNode(treeRoot, pos);
+        treeRoot.isDrawn = true;
         
-        if (level == 1)
+
+        const float xSpacing = 100f;
+        const float ySpacing = 150f;
+        
+        if (treeRoot.left != null)
         {
-            levelList.Add(root);
-        }else if (level > 1)
+            yield return DrawTree(treeRoot.left, new Vector2(pos.x + xSpacing, pos.y - ySpacing));
+        }
+                
+        if (treeRoot.right != null)
         {
-            GetNodesOfCurrentLevel(root.left, level -1, ref levelList);
-            GetNodesOfCurrentLevel(root.right, level -1, ref levelList);
+            yield return DrawTree(treeRoot.right, new Vector2(pos.x - xSpacing, pos.y - ySpacing));
         }
     }
-    
+
+    /// <summary>
+    /// Draw a node in the tree
+    /// </summary>
+    /// <param name="node"></param>
+    /// <param name="pos"></param>
+    private void DrawNode(BSPTreeNode node, Vector2 pos)
+    {
+        //Spawn
+        Transform parentTransform = canvasParent.transform;
+        GameObject obj = Instantiate(itemPrefab, canvasParent.transform);
+        
+        //Move to pos
+        Vector3 parentPos = parentTransform.position;
+        obj.transform.position = new Vector3(parentPos.x + pos.x, parentPos.y + pos.y);
+        
+        //Set letter
+        obj.GetComponentInChildren<TMP_Text>().text = GetNodeLetter(index);
+        index++;
+    }
+
     /// <summary>
     /// Get the letter of the node from a given index
     /// </summary>

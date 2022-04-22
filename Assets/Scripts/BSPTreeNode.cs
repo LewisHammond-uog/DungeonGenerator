@@ -9,6 +9,7 @@ public class BSPTreeNode
     public BSPTreeNode parent;
     public BSPTreeNode left;
     public BSPTreeNode right;
+    public bool isDrawn = false;
 
     //The minium size to allow a split
     private static Vector2Int minSplitSize;

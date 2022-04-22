@@ -17,7 +17,7 @@ public class Generator : MonoBehaviour
     void Start()
     {
         GenerateSpace();
-        GetComponent<BSPGraphVisualizer>().DrawTree(tree);
+        StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
     }
     private void GenerateSpace()
     {
