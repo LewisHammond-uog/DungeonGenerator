@@ -521,8 +521,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d381887270fdf084d836e3c269948354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasParent: {fileID: 579823457}
-  layerPrefab: {fileID: 7798639253079603951, guid: fc9c73034b513cf43ac252159973f4f9, type: 3}
+  canvasParent: {fileID: 123183325}
+  itemPrefab: {fileID: 6155514642928731136, guid: b543832af3b734b4eb0f6e0d578243fd, type: 3}
 --- !u!1 &1113439483
 GameObject:
   m_ObjectHideFlags: 0
