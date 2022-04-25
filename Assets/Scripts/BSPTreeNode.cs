@@ -38,28 +38,24 @@ public class BSPTreeNode
 
         if (IsContainerGreaterThanMinSize(splitContainers[0]))
         {
-            treeNode.left = Split(numberOfIterations - 1, splitContainers[0]);
+            treeNode.left = treeNode.Split(numberOfIterations - 1, splitContainers[0]);
             treeNode.left.parent = this;
         }
         else
         {
-            treeNode.left = new BSPTreeNode(splitContainers[0])
-            {
-                parent = this
-            };
+            treeNode.left = new BSPTreeNode(splitContainers[0]);
+            treeNode.left.parent = this;
         }
 
         if (IsContainerGreaterThanMinSize(splitContainers[1]))
         {
-            treeNode.right = Split(numberOfIterations - 1, splitContainers[1]);
+            treeNode.right = treeNode.Split(numberOfIterations - 1, splitContainers[1]);
             treeNode.right.parent = this;
         }
         else
         {
-            treeNode.right = new BSPTreeNode(splitContainers[1])
-            {
-                parent = this
-            };
+            treeNode.right = new BSPTreeNode(splitContainers[1]);
+            treeNode.right.parent = this;
         }
         
         return treeNode;
@@ -98,6 +94,16 @@ public class BSPTreeNode
 
         return new RectInt[] {c1, c2};
     }
+
+    /// <summary>
+    /// Is this node a leaf node
+    /// </summary>
+    /// <returns></returns>
+    public bool IsLeaf()
+    {
+        return left == null && right == null;
+    }
+
 
     /// <summary>
     /// Is this container less than the minimum allowed size

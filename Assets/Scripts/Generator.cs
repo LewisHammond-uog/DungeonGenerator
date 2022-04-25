@@ -17,6 +17,7 @@ public class Generator : MonoBehaviour
     void Start()
     {
         GenerateSpace();
+        GenerateCorridors();
         StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
     }
     private void GenerateSpace()
@@ -37,10 +38,19 @@ public class Generator : MonoBehaviour
         }
 
     }
+
+    private void GenerateCorridors()
+    {
+        if (tree != null && tree.RootNode != null)
+        {
+            tree.GenerateCorridorsNode(tree.RootNode);
+        }
+    }
     
 #if UNITY_EDITOR
     private void OnDrawGizmos ()
     {
+        //GenerateCorridors();
         DebugDrawBsp();
     }
 
