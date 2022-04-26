@@ -73,29 +73,5 @@ public class BSPTree
             GetLeafNodes(root.right, ref leafNodes);
         }
     }
-
-    public void GenerateCorridorsNode(BSPTreeNode node)
-    {
-        if (node.IsLeaf())
-        {
-            RectInt leftContainer = node.parent.left.container;
-            RectInt rightContainer = node.parent.right.container;
-            
-            
-            Vector2 leftCenter = leftContainer.center;
-            Vector2 rightCenter = rightContainer.center;
-            Vector2 direction = (rightCenter - leftCenter).normalized;
-            
-        }
-        
-        if (node.left != null)
-        {
-            GenerateCorridorsNode(node.left);
-        }
-
-        if (node.right != null)
-        {
-            GenerateCorridorsNode(node.right);
-        }
-    }
+    
 }

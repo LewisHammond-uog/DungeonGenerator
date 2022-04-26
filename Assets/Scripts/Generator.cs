@@ -13,6 +13,8 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private GameObject roomPrefab;
 
+    [SerializeField] private GameObject corridor;
+
     [SerializeField] private List<GameObject> spawnedRooms;
     
     // Start is called before the first frame update
@@ -46,8 +48,51 @@ public class Generator : MonoBehaviour
     {
         if (tree != null && tree.RootNode != null)
         {
-            tree.GenerateCorridorsNode(tree.RootNode);
+            StartCoroutine(GenerateCorridorsNode(tree.RootNode));
         }
+    }
+    
+    public IEnumerator GenerateCorridorsNode(BSPTreeNode node)
+    {
+        if (node.IsInternal)
+        {
+            RectInt leftContainer = node.left.container;
+            RectInt rightContainer = node.right.container;
+            
+            
+            Vector2 leftCenter = leftContainer.center;
+            Vector2 rightCenter = rightContainer.center;
+            Vector2 direction = (rightCenter - leftCenter).normalized;
+
+            while (Vector2.Distance(leftCenter, rightCenter) > 1)
+            {
+                if (direction.Equals(Vector2.right))
+                {
+                    Instantiate(corridor, new Vector3(leftCenter.x, leftCenter.y), Quaternion.Euler(90, 0, 0));
+
+                }else if (direction.Equals(Vector2.up))
+                {
+                    Instantiate(corridor, new Vector3(leftCenter.x, leftCenter.y), Quaternion.Euler(90, 0, 0));
+                }
+
+                yield return new WaitForSeconds(0.25f);
+                
+                leftCenter.x += direction.x;
+                leftCenter.y += direction.y;
+            }
+            
+            if (node.left != null)
+            {
+                yield return GenerateCorridorsNode(node.left);
+            }
+
+            if (node.right != null)
+            {
+                yield return GenerateCorridorsNode(node.right);
+            }
+        }
+        
+
     }
     
 #if UNITY_EDITOR

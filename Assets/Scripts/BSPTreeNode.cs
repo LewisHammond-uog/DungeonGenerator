@@ -21,6 +21,10 @@ public class BSPTreeNode
     private const float MinSplitRatio = 0.3f;
     private const float MaxSplitRatio = 0.5f;
 
+    public bool IsLeaf => left == null && right == null;
+    public bool IsInternal => left != null || right != null;
+    
+    
     public BSPTreeNode(RectInt container)
     {
         this.container = container;
@@ -39,6 +43,7 @@ public class BSPTreeNode
         if (IsContainerGreaterThanMinSize(splitContainers[0]))
         {
             treeNode.left = treeNode.Split(numberOfIterations - 1, splitContainers[0]);
+            //set the parent to THIS, means that the tree node we created must call the split method
             treeNode.left.parent = this;
         }
         else
@@ -94,16 +99,6 @@ public class BSPTreeNode
 
         return new RectInt[] {c1, c2};
     }
-
-    /// <summary>
-    /// Is this node a leaf node
-    /// </summary>
-    /// <returns></returns>
-    public bool IsLeaf()
-    {
-        return left == null && right == null;
-    }
-
 
     /// <summary>
     /// Is this container less than the minimum allowed size
