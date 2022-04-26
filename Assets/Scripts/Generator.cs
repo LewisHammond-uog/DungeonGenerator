@@ -12,6 +12,8 @@ public class Generator : MonoBehaviour
     [SerializeField] private Vector2Int minRoomSize;
 
     [SerializeField] private GameObject roomPrefab;
+
+    [SerializeField] private List<GameObject> spawnedRooms;
     
     // Start is called before the first frame update
     void Start()
@@ -19,7 +21,7 @@ public class Generator : MonoBehaviour
         GenerateSpace();
         GetComponent<BSPGraphVisualizer>().LevelBasedSearch(tree);
     }
-    private void GenerateSpace()
+    public void GenerateSpace()
     {
         tree = new BSPTree(numberOfItterations, dungeonSize, minRoomSize);
         GenerateRooms();
@@ -34,6 +36,7 @@ public class Generator : MonoBehaviour
         {
             GameObject obj = Instantiate(roomPrefab);
             obj.transform.position = node.container.center;
+            spawnedRooms.Add(obj);
         }
 
     }
