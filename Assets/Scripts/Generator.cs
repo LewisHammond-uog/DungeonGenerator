@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Generator : MonoBehaviour
@@ -11,7 +12,7 @@ public class Generator : MonoBehaviour
     [SerializeField] private Vector2Int dungeonSize;
     [SerializeField] private Vector2Int minRoomSize;
 
-    [SerializeField] private GameObject roomPrefab;
+    [SerializeField] private RoomInfo[] rooms;
 
     [SerializeField] private GameObject corridor;
 
@@ -37,11 +38,10 @@ public class Generator : MonoBehaviour
 
         foreach (BSPTreeNode node in leafNodes)
         {
-            GameObject obj = Instantiate(roomPrefab);
-            obj.transform.position = node.container.center;
+            GameObject obj = Instantiate(RoomUtils.GetRoomPrefabForNode(node, rooms));
+            obj.transform.position = new Vector3((int)node.container.center.x, (int)node.container.center.y);
             spawnedRooms.Add(obj);
         }
-
     }
 
     private void GenerateCorridors()
@@ -68,14 +68,14 @@ public class Generator : MonoBehaviour
             {
                 if (direction.Equals(Vector2.right))
                 {
-                    Instantiate(corridor, new Vector3(leftCenter.x, leftCenter.y), Quaternion.Euler(90, 0, 0));
+                    GameObject spawnedCorridor = Instantiate(corridor, new Vector3((int)leftCenter.x, (int)leftCenter.y), Quaternion.Euler(90, 0, 0));
+                    RemoveWallsAtPos(spawnedCorridor);
 
                 }else if (direction.Equals(Vector2.up))
                 {
-                    Instantiate(corridor, new Vector3(leftCenter.x, leftCenter.y), Quaternion.Euler(90, 0, 0));
+                    GameObject spawnedCorridor = Instantiate(corridor, new Vector3((int)leftCenter.x, (int)leftCenter.y), Quaternion.Euler(90, 0, 0));
+                    RemoveWallsAtPos(spawnedCorridor);
                 }
-
-                yield return new WaitForSeconds(0.25f);
                 
                 leftCenter.x += direction.x;
                 leftCenter.y += direction.y;
@@ -91,8 +91,28 @@ public class Generator : MonoBehaviour
                 yield return GenerateCorridorsNode(node.right);
             }
         }
-        
+    }
 
+    private void RemoveWallsAtPos(GameObject corridor)
+    {
+        Vector3 posV3 = new Vector3(corridor.transform.position.x, corridor.transform.position.y, 0);
+        Collider[] hits = Physics.OverlapBox(posV3, corridor.transform.localScale/2);
+
+        List<GameObject> delObjs = new List<GameObject>();
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject.CompareTag("Wall"))
+            {
+                delObjs.Add(hit.gameObject);
+                Debug.Log("Wall");
+            }
+        }
+
+        foreach (GameObject delObj in delObjs)
+        {
+            Destroy(delObj);
+            Debug.Log("Des");
+        }
     }
     
 #if UNITY_EDITOR

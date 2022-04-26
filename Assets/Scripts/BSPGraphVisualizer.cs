@@ -13,8 +13,6 @@ public class BSPGraphVisualizer : MonoBehaviour
 
     private int index;
 
-    //https://www.freecodecamp.org/news/binarytreeviewer-with-c-c-css-html-by-gilad-bar-ilan/
-    
     /// <summary>
     /// Draw a tree
     /// </summary>
