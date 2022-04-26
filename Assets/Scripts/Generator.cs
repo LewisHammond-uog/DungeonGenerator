@@ -96,7 +96,12 @@ public class Generator : MonoBehaviour
     private void RemoveWallsAtPos(GameObject corridor)
     {
         Vector3 posV3 = new Vector3(corridor.transform.position.x, corridor.transform.position.y, 0);
-        Collider[] hits = Physics.OverlapBox(posV3, corridor.transform.localScale/2);
+        
+        //Take the size of the corrodior blocks but add some height to fix issues with no overlap with some rooms
+        Vector3 halfExtends =
+            new Vector3(corridor.transform.localScale.x / 2, corridor.transform.localScale.y / 2, 10f);
+        
+        Collider[] hits = Physics.OverlapBox(posV3, halfExtends);
 
         List<GameObject> delObjs = new List<GameObject>();
         foreach (Collider hit in hits)
