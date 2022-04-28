@@ -95,13 +95,11 @@ public class Generator : MonoBehaviour
             {
                 if (direction.Equals(Vector2.right))
                 {
-                    map.SetTile(Vector2Int.RoundToInt(leftCenter), corridor);
-                    //GameObject spawnedCorridor = Instantiate(corridor, new Vector3((int)leftCenter.x, (int)leftCenter.y), Quaternion.Euler(90, 0, 0));
+                    map.SpawnTile(Vector2Int.RoundToInt(leftCenter), corridor);
 
                 }else if (direction.Equals(Vector2.up))
                 {
-                    map.SetTile(Vector2Int.RoundToInt(leftCenter), corridor);
-                    GameObject spawnedCorridor = Instantiate(corridor, new Vector3((int)leftCenter.x, (int)leftCenter.y), Quaternion.Euler(90, 0, 0));
+                    map.SpawnTile(Vector2Int.RoundToInt(leftCenter), corridor);
                 }
                 
                 leftCenter.x += direction.x;
