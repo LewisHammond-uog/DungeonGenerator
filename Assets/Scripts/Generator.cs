@@ -8,6 +8,7 @@ public class Generator : MonoBehaviour
     private BSPTree tree;
 
     [SerializeField] private int numberOfItterations = 10;
+    [SerializeField] private int corridorThickness = 2;
 
     [SerializeField] private Vector2Int dungeonSize;
     [SerializeField] private Vector2Int minRoomSize;
@@ -48,7 +49,7 @@ public class Generator : MonoBehaviour
         
         
         GenerateSpace();
-        GenerateCorridors();
+        //GenerateCorridors();
         //StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
         //PaintTilesAccordingToTheirNeighbors();
     }
@@ -87,20 +88,25 @@ public class Generator : MonoBehaviour
             RectInt leftContainer = node.left.container;
             RectInt rightContainer = node.right.container;
             
-            
             Vector2 leftCenter = leftContainer.center;
             Vector2 rightCenter = rightContainer.center;
             Vector2 direction = (rightCenter - leftCenter).normalized;
             
-            while (Vector2.Distance(leftCenter, rightCenter) > 1)
+            while (Vector2.Distance(leftCenter, rightCenter) > 0.1f)
             {
                 if (direction.Equals(Vector2.right))
                 {
-                    map.SpawnTile(Vector2Int.RoundToInt(leftCenter), corridor);
+                    for (int i = 0; i < corridorThickness; i++)
+                    {
+                        map.SpawnTile(new Vector2Int((int) leftCenter.x, (int) leftCenter.y + i), corridor);
+                    }
 
                 }else if (direction.Equals(Vector2.up))
                 {
-                    map.SpawnTile(Vector2Int.RoundToInt(leftCenter), corridor);
+                    for (int i = 0; i < corridorThickness; i++)
+                    {
+                        map.SpawnTile(new Vector2Int((int) leftCenter.x + i, (int) leftCenter.y), corridor);
+                    }
                 }
                 
                 leftCenter.x += direction.x;

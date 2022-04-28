@@ -36,7 +36,7 @@ public class TileMap3D : MonoBehaviour
     public void InsertRoom(Vector2Int roomCenterSpawnPos, GameObject roomPrefab)
     {
         Vector3 posV3 = new Vector3(roomCenterSpawnPos.x, 0, roomCenterSpawnPos.y);
-        GameObject room = Instantiate(roomPrefab, posV3,  Quaternion.Euler(0,0,180));
+        GameObject room = Instantiate(roomPrefab, posV3,  Quaternion.identity);
         
         //Get tilemap comp from room
         if (!room.TryGetComponent(out RoomTileMap roomMapComp))
@@ -94,7 +94,7 @@ public class TileMap3D : MonoBehaviour
             Vector3 objWorldPos = tile.gameObject.transform.position;
             float diff = Vector3.Distance(objWorldPos, new Vector3(tileMapPos.x, 0, tileMapPos.y));
             const float reasonableDist = 0.1f; //Epsilon is too small for unity's FP differences
-            if (diff > 0.1f)
+            if (diff > reasonableDist)
             {
                 Debug.LogWarning("Setting tile in TileMap to a different position than in the world" +
                                  $"{objWorldPos} vs {tileMapPos}");
@@ -150,7 +150,8 @@ public class TileMap3D : MonoBehaviour
         {
             for (int y = 0; y < mapSize.y; y++)
             {
-                Gizmos.color = map[x, y] != null ? Color.green : Color.red;
+                Color nullColour = new Color(1f, 0f, 0f, 0.25f);
+                Gizmos.color = map[x, y] != null ? Color.green : nullColour;
                 Gizmos.DrawCube(new Vector3(x,0,y), Vector3.one);
             }
         }

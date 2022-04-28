@@ -67,7 +67,7 @@ namespace DefaultNamespace
             //Loop objects check positions
             foreach (GameObject obj in objects)
             {
-                int objX = Mathf.RoundToInt(-obj.transform.localPosition.x);
+                int objX = Mathf.RoundToInt(obj.transform.localPosition.x);
                 int objY = Mathf.RoundToInt(obj.transform.localPosition.z);
                 Vector2Int objPosV2 = new Vector2Int(objX, objY);
                 
