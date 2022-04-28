@@ -55,9 +55,9 @@ public class TileMap3D : MonoBehaviour
         
         //Add to tilemap
         GameObject[,] roomMap = roomMapComp.map;
-        for (int x = roomMapComp.mapSize.x; x < roomMapComp.mapSize.x; x++)
+        for (int x = 0; x < roomMapComp.mapSize.x; x++)
         {
-            for (int y = roomMapComp.mapSize.y; y < roomMapComp.mapSize.y; y++)
+            for (int y = 0; y < roomMapComp.mapSize.y; y++)
             {
                 Vector2Int mainMapPos = new Vector2Int(roomCenterSpawnPos.x + x,
                     roomCenterSpawnPos.y + y );
