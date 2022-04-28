@@ -36,7 +36,7 @@ public class TileMap3D : MonoBehaviour
     public void InsertRoom(Vector2Int roomCenterSpawnPos, GameObject roomPrefab)
     {
         Vector3 posV3 = new Vector3(roomCenterSpawnPos.x, 0, roomCenterSpawnPos.y);
-        GameObject room = Instantiate(roomPrefab, posV3, Quaternion.identity);
+        GameObject room = Instantiate(roomPrefab, posV3,  Quaternion.Euler(0,0,180));
         
         //Get tilemap comp from room
         if (!room.TryGetComponent(out RoomTileMap roomMapComp))
@@ -92,7 +92,9 @@ public class TileMap3D : MonoBehaviour
         {
             //Check the object that we are providing is in the correct location
             Vector3 objWorldPos = tile.gameObject.transform.position;
-            if (Vector3.Distance(objWorldPos, new Vector3(tileMapPos.x, 0,tileMapPos.y)) > float.Epsilon * 2)
+            float diff = Vector3.Distance(objWorldPos, new Vector3(tileMapPos.x, 0, tileMapPos.y));
+            const float reasonableDist = 0.1f; //Epsilon is too small for unity's FP differences
+            if (diff > 0.1f)
             {
                 Debug.LogWarning("Setting tile in TileMap to a different position than in the world" +
                                  $"{objWorldPos} vs {tileMapPos}");

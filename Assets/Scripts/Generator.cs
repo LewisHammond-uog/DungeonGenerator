@@ -48,7 +48,7 @@ public class Generator : MonoBehaviour
         
         
         GenerateSpace();
-        //GenerateCorridors();
+        GenerateCorridors();
         //StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
         //PaintTilesAccordingToTheirNeighbors();
     }
@@ -143,13 +143,13 @@ public class Generator : MonoBehaviour
         // Container
         Gizmos.color = Color.green;
         // top
-        Gizmos.DrawLine (new Vector3 (node.container.x, node.container.y, 0), new Vector3Int (node.container.xMax, node.container.y, 0));
+        Gizmos.DrawLine (new Vector3 (node.container.x, 0, node.container.y), new Vector3Int (node.container.xMax, 0, node.container.y));
         // right
-        Gizmos.DrawLine (new Vector3 (node.container.xMax, node.container.y, 0), new Vector3Int (node.container.xMax, node.container.yMax, 0));
+        Gizmos.DrawLine (new Vector3 (node.container.xMax, 0, node.container.y), new Vector3Int (node.container.xMax, 0, node.container.yMax));
         // bottom
-        Gizmos.DrawLine (new Vector3 (node.container.x, node.container.yMax, 0), new Vector3Int (node.container.xMax, node.container.yMax, 0));
+        Gizmos.DrawLine (new Vector3 (node.container.x, 0, node.container.yMax), new Vector3Int (node.container.xMax, 0, node.container.yMax));
         // left
-        Gizmos.DrawLine (new Vector3 (node.container.x, node.container.y, 0), new Vector3Int (node.container.x, node.container.yMax, 0));
+        Gizmos.DrawLine (new Vector3 (node.container.x, 0, node.container.y), new Vector3Int (node.container.x, 0, node.container.yMax));
 
         // children
         if (node.left != null) DebugDrawBspNode (node.left);
