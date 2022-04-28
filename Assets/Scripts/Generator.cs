@@ -12,6 +12,7 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private Vector2Int dungeonSize;
     [SerializeField] private Vector2Int minRoomSize;
+    [SerializeField] private GameObject debugTile;
 
     [SerializeField] private RoomInfo[] rooms;
 
@@ -19,24 +20,17 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private List<GameObject> spawnedRooms;
     
-    [HideInInspector]
-    public GameObject tlTile;
-    [HideInInspector]
-    public GameObject tmTile;
-    [HideInInspector]
-    public GameObject trTile;
-    [HideInInspector]
-    public GameObject mlTile;
-    [HideInInspector]
-    public GameObject mmTile;
-    [HideInInspector]
-    public GameObject mrTile;
-    [HideInInspector]
-    public GameObject blTile;
-    [HideInInspector]
-    public GameObject bmTile;
-    [HideInInspector]
-    public GameObject brTile;
+    #region Tiles
+    [HideInInspector] public GameObject tlTile;
+    [HideInInspector] public GameObject tmTile;
+    [HideInInspector] public GameObject trTile;
+    [HideInInspector] public GameObject mlTile;
+    [HideInInspector] public GameObject mmTile;
+    [HideInInspector] public GameObject mrTile;
+    [HideInInspector] public GameObject blTile;
+    [HideInInspector] public GameObject bmTile;
+    [HideInInspector] public GameObject brTile;
+    #endregion
 
     private TileMap3D map;
     
@@ -49,9 +43,9 @@ public class Generator : MonoBehaviour
         
         
         GenerateSpace();
-        //GenerateCorridors();
+        GenerateCorridors();
+        PaintTiles();
         //StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
-        //PaintTilesAccordingToTheirNeighbors();
     }
     public void GenerateSpace()
     {
@@ -77,11 +71,11 @@ public class Generator : MonoBehaviour
     {
         if (tree != null && tree.RootNode != null)
         {
-            StartCoroutine(GenerateCorridorsNode(tree.RootNode));
+           GenerateCorridorsNode(tree.RootNode);
         }
     }
     
-    public IEnumerator GenerateCorridorsNode(BSPTreeNode node)
+    public void GenerateCorridorsNode(BSPTreeNode node)
     {
         if (node.IsInternal)
         {
@@ -92,7 +86,7 @@ public class Generator : MonoBehaviour
             Vector2 rightCenter = rightContainer.center;
             Vector2 direction = (rightCenter - leftCenter).normalized;
             
-            while (Vector2.Distance(leftCenter, rightCenter) > 0.1f)
+            while (Vector2.Distance(leftCenter, rightCenter) > 0.51f)
             {
                 if (direction.Equals(Vector2.right))
                 {
@@ -115,15 +109,67 @@ public class Generator : MonoBehaviour
             
             if (node.left != null)
             {
-                yield return GenerateCorridorsNode(node.left);
+                GenerateCorridorsNode(node.left);
             }
 
             if (node.right != null)
             {
-                yield return GenerateCorridorsNode(node.right);
+               GenerateCorridorsNode(node.right);
             }
         }
     }
+
+    /// <summary>
+    /// Get the correct tile in the tile map to use based on our neighbours
+    /// </summary>
+    private GameObject GetTileFromNeighbours(int x, int y)
+    {
+        GameObject mmGridTile = map.GetTile (new Vector2Int (x,   y));
+        if (mmGridTile == null) return null; //repaint anything that does have a 
+
+        GameObject blGridTile = map.GetTile (new Vector2Int (x-1, y-1));
+        GameObject bmGridTile = map.GetTile (new Vector2Int (x,   y-1));
+        GameObject brGridTile = map.GetTile (new Vector2Int (x+1, y-1));
+
+        GameObject mlGridTile = map.GetTile (new Vector2Int (x-1, y));
+        GameObject mrGridTile = map.GetTile (new Vector2Int (x+1, y));
+
+        GameObject tlGridTile = map.GetTile (new Vector2Int (x-1, y+1));
+        GameObject tmGridTile = map.GetTile (new Vector2Int (x,   y+1));
+        GameObject trGridTile = map.GetTile (new Vector2Int (x+1, y+1));
+
+        // we have 8 + 1 cases
+		
+        // left
+        if (mlGridTile == null && tmGridTile == null) return tlTile;
+        if (mlGridTile == null && tmGridTile != null && bmGridTile != null) return mlTile;
+        if (mlGridTile == null && bmGridTile == null && tmGridTile != null) return blTile;
+		
+        // middle
+        if (mlGridTile != null && tmGridTile == null && mrGridTile != null) return tmTile;
+        if (mlGridTile != null && bmGridTile == null && mrGridTile != null) return bmTile;
+		
+        // right
+        if (mlGridTile != null && tmGridTile == null && mrGridTile == null) return trTile;
+        if (tmGridTile != null && bmGridTile != null && mrGridTile == null) return mrTile;
+        if (tmGridTile != null && bmGridTile == null && mrGridTile == null) return brTile;
+
+        return mmTile; // default case
+    }
+
+    private void PaintTiles()
+    {
+        for (int i = 0; i < dungeonSize.x; i++) {
+            for (int j = 0; j < dungeonSize.y; j++) {
+                GameObject tile = GetTileFromNeighbours (i, j);
+                if (tile != null) {
+                    map.SpawnTile(new Vector2Int(i,j), tile);
+                }
+            }
+        }
+    }
+    
+    
 
 
 #if UNITY_EDITOR

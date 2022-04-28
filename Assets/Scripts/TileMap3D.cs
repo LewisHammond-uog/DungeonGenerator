@@ -66,12 +66,23 @@ public class TileMap3D : MonoBehaviour
                 if (!IsInTileMap(mainMapPos))
                 {
                     Debug.LogError("Tile not in map bounds");
+                    Destroy(room);
                     return;
                 }
                 
                 SetTileInMap(mainMapPos, floorObj);
             }
         }
+    }
+
+    /// <summary>
+    /// Get tile at given position
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
+    public GameObject GetTile(Vector2Int pos)
+    {
+        return !IsInTileMap(pos) ? null : map[pos.x, pos.y];
     }
 
     /// <summary>

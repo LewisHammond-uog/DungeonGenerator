@@ -454,8 +454,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 918, y: 787.7, z: 1300}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 98.98375, y: 187.85, z: 97.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -491,24 +491,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd6f9ae9c5d00d458105eec7975aafd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfItterations: 0
+  numberOfItterations: 9
   corridorThickness: 2
-  dungeonSize: {x: 20, y: 20}
-  minRoomSize: {x: 3, y: 3}
+  dungeonSize: {x: 200, y: 100}
+  minRoomSize: {x: 6, y: 6}
+  debugTile: {fileID: 451882589754301966, guid: 059041b8fed61a0489dd63f37812a1b1, type: 3}
   rooms:
   - roomPrefab: {fileID: 3805796202354055709, guid: b460f0cea5fb590449cc2f46043f5945, type: 3}
-    size: {x: 3, y: 3}
+    size: {x: 6, y: 6}
+  - roomPrefab: {fileID: 3805796202354055709, guid: 59d0ce00278b6624f85156e06066f2ca, type: 3}
+    size: {x: 11, y: 11}
   corridor: {fileID: 451882589754301966, guid: b4eb1af984c3be742b7eeeff4c58efdb, type: 3}
   spawnedRooms: []
-  tlTile: {fileID: 836392930766269597, guid: dde5b72b319367e4c8935e3a7fb556fc, type: 3}
-  tmTile: {fileID: 836392930766269597, guid: a01c4608e3d943e4d9b54257ed8f4d3f, type: 3}
-  trTile: {fileID: 836392930766269597, guid: e331c0251120d714fb84be9bba11d056, type: 3}
-  mlTile: {fileID: 836392930766269597, guid: 0532fbd006b9b444f8b5a37d4f2ecdd3, type: 3}
-  mmTile: {fileID: 836392930766269597, guid: d0dabf687afe4ac41b1b39d1d39f2065, type: 3}
-  mrTile: {fileID: 836392930766269597, guid: 391d96f970e1027448bcdb6a805b5c17, type: 3}
-  blTile: {fileID: 836392930766269597, guid: 7f1e5178d2df84f4a8715149292fbf98, type: 3}
-  bmTile: {fileID: 836392930766269597, guid: 86b9b0d42c07399489beb25f74a99623, type: 3}
-  brTile: {fileID: 836392930766269597, guid: 7f1e5178d2df84f4a8715149292fbf98, type: 3}
+  tlTile: {fileID: 4800298893490477974, guid: a20022a7111627a40aad106ad3835b0e, type: 3}
+  tmTile: {fileID: 4800298893490477974, guid: 01304611eb1fbbc4a9b536ef9b78bc0d, type: 3}
+  trTile: {fileID: 4800298893490477974, guid: d73d85669646bb540a79d8b1b4f7d755, type: 3}
+  mlTile: {fileID: 4800298893490477974, guid: abcbf9c179ebd2146b126a14314b64e9, type: 3}
+  mmTile: {fileID: 4800298893490477974, guid: 34a63bdb69026f84fb7cfb118dc5c451, type: 3}
+  mrTile: {fileID: 4800298893490477974, guid: 6dad4d9b21f336646adf708e89a00f2d, type: 3}
+  blTile: {fileID: 4800298893490477974, guid: 9e9cada966637ac42b7421fc983a6e47, type: 3}
+  bmTile: {fileID: 4800298893490477974, guid: c24a98aa4b6318c4f881e77e5087742c, type: 3}
+  brTile: {fileID: 4800298893490477974, guid: 19283a1624205c448b70df12318f60d6, type: 3}
 --- !u!4 &998241708
 Transform:
   m_ObjectHideFlags: 0
