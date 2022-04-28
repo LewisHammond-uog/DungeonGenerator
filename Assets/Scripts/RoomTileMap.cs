@@ -12,12 +12,11 @@ namespace DefaultNamespace
         [SerializeField] private GameObject topLeftGO;
         [SerializeField] private GameObject bottomRightGO;
         
-        private void Awake()
-        {
-            FillMapWithObjects();
-        }
 
-        private void FillMapWithObjects()
+        /// <summary>
+        /// Fill the Room TileMap with the floor objects in the room
+        /// </summary>
+        public void FillMapWithObjects()
         {
             //Get all of the child floor objects
             List<GameObject> floorObjects = new List<GameObject>();
@@ -51,6 +50,11 @@ namespace DefaultNamespace
                     map[x, y] = FindObjectAtPos(originPos, x, y, floorObjects);
                 }
             }
+        }
+
+        public Vector2Int GetRoomCenterOnGrid()
+        {
+            return mapSize / 2;
         }
 
         private GameObject FindObjectAtPos(Vector2Int origin, int x, int y, List<GameObject> objects)

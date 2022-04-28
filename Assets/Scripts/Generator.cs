@@ -48,8 +48,8 @@ public class Generator : MonoBehaviour
         
         
         GenerateSpace();
-        GenerateCorridors();
-        StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
+        //GenerateCorridors();
+        //StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
         //PaintTilesAccordingToTheirNeighbors();
     }
     public void GenerateSpace()
@@ -60,15 +60,16 @@ public class Generator : MonoBehaviour
 
     private void GenerateRooms()
     {
+
         List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
         tree.GetLeafNodes(ref leafNodes);
 
         foreach (BSPTreeNode node in leafNodes)
         {
-            GameObject obj = Instantiate(RoomUtils.GetRoomPrefabForNode(node, rooms));
-            obj.transform.position = new Vector3((int)node.container.center.x, (int)node.container.center.y);
-            spawnedRooms.Add(obj);
+            Vector2Int spawnPos = Vector2Int.RoundToInt(node.container.center);
+            map.InsertRoom(spawnPos, RoomUtils.GetRoomPrefabForNode(node, rooms));
         }
+        
     }
 
     private void GenerateCorridors()
@@ -118,77 +119,10 @@ public class Generator : MonoBehaviour
         }
     }
 
-    public GameObject GetTile(Vector3Int pos)
-    {
-        Vector3 halfExtends =
-            new Vector3(corridor.transform.localScale.x / 2, corridor.transform.localScale.y / 2, 10f);
 
-        Vector3 posV3 = new Vector3(pos.x, pos.y, 0);
-        
-        Collider[] hits = Physics.OverlapBox(posV3, halfExtends);
-
-        if (hits.Length == 0)
-        {
-            return null;
-        }
-        else
-        {
-            return hits[0].gameObject;
-        }
-    }
-    
-    private void PaintTilesAccordingToTheirNeighbors () {
-        for (int i = 0; i < dungeonSize.x; i++) {
-            for (int j = 0; j < dungeonSize.y; j++) {
-                var tile = GetTileByNeighbours (i, j);
-                if (tile != null)
-                {
-                    Instantiate(tile, new Vector3(i, j), Quaternion.identity);
-                }
-            }
-        }
-    }
-
-    public GameObject GetTileByNeighbours(int i, int j)
-    {
-        GameObject mmGridTile = GetTile (new Vector3Int (i, j, 0));
-        if (mmGridTile == null) return null; // you shouldn't repaint a n
-
-        GameObject blGridTile = GetTile (new Vector3Int (i-1, j-1, 0));
-        GameObject bmGridTile = GetTile (new Vector3Int (i,   j-1, 0));
-        GameObject brGridTile = GetTile (new Vector3Int (i+1, j-1, 0));
-
-        GameObject mlGridTile = GetTile (new Vector3Int (i-1, j, 0));
-        GameObject mrGridTile = GetTile (new Vector3Int (i+1, j, 0));
-
-        GameObject tlGridTile = GetTile (new Vector3Int (i-1, j+1, 0));
-        GameObject tmGridTile = GetTile (new Vector3Int (i,   j+1, 0));
-        GameObject trGridTile = GetTile (new Vector3Int (i+1, j+1, 0));
-
-        // we have 8 + 1 cases
-
-        // left
-        if (mlGridTile == null && tmGridTile == null) return tlTile;
-        if (mlGridTile == null && tmGridTile != null && bmGridTile != null) return mlTile;
-        if (mlGridTile == null && bmGridTile == null && tmGridTile != null) return blTile;
-
-        // middle
-        if (mlGridTile != null && tmGridTile == null && mrGridTile != null) return tmTile;
-        if (mlGridTile != null && bmGridTile == null && mrGridTile != null) return bmTile;
-
-        // right
-        if (mlGridTile != null && tmGridTile == null && mrGridTile == null) return trTile;
-        if (tmGridTile != null && bmGridTile != null && mrGridTile == null) return mrTile;
-        if (tmGridTile != null && bmGridTile == null && mrGridTile == null) return brTile;
-
-        return mmTile; // default case
-    }
-    
-    
 #if UNITY_EDITOR
     private void OnDrawGizmos ()
     {
-        //GenerateCorridors();
         DebugDrawBsp();
     }
 
