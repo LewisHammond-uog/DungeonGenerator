@@ -50,8 +50,8 @@ public class TileMap3D : MonoBehaviour
         roomMapComp.FillMapWithObjects();
         
         //Get room center - move room to be centered on grid
-        //Vector2Int roomCenter = roomMapComp.GetRoomCenterOnGrid();
-        //room.transform.position += new Vector3(roomCenter.x, roomCenter.y);
+        Vector2Int roomCenter = roomMapComp.GetRoomCenterOnGrid();
+        room.transform.position -= new Vector3(roomCenter.x, 0, roomCenter.y);
         
         //Add to tilemap
         GameObject[,] roomMap = roomMapComp.map;
@@ -59,8 +59,8 @@ public class TileMap3D : MonoBehaviour
         {
             for (int y = 0; y < roomMapComp.mapSize.y; y++)
             {
-                Vector2Int mainMapPos = new Vector2Int(roomCenterSpawnPos.x + x,
-                    roomCenterSpawnPos.y + y );
+                Vector2Int mainMapPos = new Vector2Int(roomCenterSpawnPos.x + x - roomCenter.x,
+                    roomCenterSpawnPos.y + y - roomCenter.y);
                 GameObject floorObj = roomMap[x, y];
                 
                 if (!IsInTileMap(mainMapPos))
