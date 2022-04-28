@@ -18,12 +18,39 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private List<GameObject> spawnedRooms;
     
+    [HideInInspector]
+    public GameObject tlTile;
+    [HideInInspector]
+    public GameObject tmTile;
+    [HideInInspector]
+    public GameObject trTile;
+    [HideInInspector]
+    public GameObject mlTile;
+    [HideInInspector]
+    public GameObject mmTile;
+    [HideInInspector]
+    public GameObject mrTile;
+    [HideInInspector]
+    public GameObject blTile;
+    [HideInInspector]
+    public GameObject bmTile;
+    [HideInInspector]
+    public GameObject brTile;
+
+    private TileMap3D map;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
+        map = gameObject.AddComponent<TileMap3D>();
+        map.Init(dungeonSize);
+        
+        
         GenerateSpace();
         GenerateCorridors();
         StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
+        //PaintTilesAccordingToTheirNeighbors();
     }
     public void GenerateSpace()
     {
@@ -68,13 +95,13 @@ public class Generator : MonoBehaviour
             {
                 if (direction.Equals(Vector2.right))
                 {
-                    GameObject spawnedCorridor = Instantiate(corridor, new Vector3((int)leftCenter.x, (int)leftCenter.y), Quaternion.Euler(90, 0, 0));
-                    RemoveWallsAtPos(spawnedCorridor);
+                    map.SetTile(Vector2Int.RoundToInt(leftCenter), corridor);
+                    //GameObject spawnedCorridor = Instantiate(corridor, new Vector3((int)leftCenter.x, (int)leftCenter.y), Quaternion.Euler(90, 0, 0));
 
                 }else if (direction.Equals(Vector2.up))
                 {
+                    map.SetTile(Vector2Int.RoundToInt(leftCenter), corridor);
                     GameObject spawnedCorridor = Instantiate(corridor, new Vector3((int)leftCenter.x, (int)leftCenter.y), Quaternion.Euler(90, 0, 0));
-                    RemoveWallsAtPos(spawnedCorridor);
                 }
                 
                 leftCenter.x += direction.x;
@@ -93,32 +120,72 @@ public class Generator : MonoBehaviour
         }
     }
 
-    private void RemoveWallsAtPos(GameObject corridor)
+    public GameObject GetTile(Vector3Int pos)
     {
-        Vector3 posV3 = new Vector3(corridor.transform.position.x, corridor.transform.position.y, 0);
-        
-        //Take the size of the corrodior blocks but add some height to fix issues with no overlap with some rooms
         Vector3 halfExtends =
             new Vector3(corridor.transform.localScale.x / 2, corridor.transform.localScale.y / 2, 10f);
+
+        Vector3 posV3 = new Vector3(pos.x, pos.y, 0);
         
         Collider[] hits = Physics.OverlapBox(posV3, halfExtends);
 
-        List<GameObject> delObjs = new List<GameObject>();
-        foreach (Collider hit in hits)
+        if (hits.Length == 0)
         {
-            if (hit.gameObject.CompareTag("Wall"))
-            {
-                delObjs.Add(hit.gameObject);
-                Debug.Log("Wall");
-            }
+            return null;
         }
-
-        foreach (GameObject delObj in delObjs)
+        else
         {
-            Destroy(delObj);
-            Debug.Log("Des");
+            return hits[0].gameObject;
         }
     }
+    
+    private void PaintTilesAccordingToTheirNeighbors () {
+        for (int i = 0; i < dungeonSize.x; i++) {
+            for (int j = 0; j < dungeonSize.y; j++) {
+                var tile = GetTileByNeighbours (i, j);
+                if (tile != null)
+                {
+                    Instantiate(tile, new Vector3(i, j), Quaternion.identity);
+                }
+            }
+        }
+    }
+
+    public GameObject GetTileByNeighbours(int i, int j)
+    {
+        GameObject mmGridTile = GetTile (new Vector3Int (i, j, 0));
+        if (mmGridTile == null) return null; // you shouldn't repaint a n
+
+        GameObject blGridTile = GetTile (new Vector3Int (i-1, j-1, 0));
+        GameObject bmGridTile = GetTile (new Vector3Int (i,   j-1, 0));
+        GameObject brGridTile = GetTile (new Vector3Int (i+1, j-1, 0));
+
+        GameObject mlGridTile = GetTile (new Vector3Int (i-1, j, 0));
+        GameObject mrGridTile = GetTile (new Vector3Int (i+1, j, 0));
+
+        GameObject tlGridTile = GetTile (new Vector3Int (i-1, j+1, 0));
+        GameObject tmGridTile = GetTile (new Vector3Int (i,   j+1, 0));
+        GameObject trGridTile = GetTile (new Vector3Int (i+1, j+1, 0));
+
+        // we have 8 + 1 cases
+
+        // left
+        if (mlGridTile == null && tmGridTile == null) return tlTile;
+        if (mlGridTile == null && tmGridTile != null && bmGridTile != null) return mlTile;
+        if (mlGridTile == null && bmGridTile == null && tmGridTile != null) return blTile;
+
+        // middle
+        if (mlGridTile != null && tmGridTile == null && mrGridTile != null) return tmTile;
+        if (mlGridTile != null && bmGridTile == null && mrGridTile != null) return bmTile;
+
+        // right
+        if (mlGridTile != null && tmGridTile == null && mrGridTile == null) return trTile;
+        if (tmGridTile != null && bmGridTile != null && mrGridTile == null) return mrTile;
+        if (tmGridTile != null && bmGridTile == null && mrGridTile == null) return brTile;
+
+        return mmTile; // default case
+    }
+    
     
 #if UNITY_EDITOR
     private void OnDrawGizmos ()

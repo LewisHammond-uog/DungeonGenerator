@@ -491,18 +491,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd6f9ae9c5d00d458105eec7975aafd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfItterations: 50
-  dungeonSize: {x: 2000, y: 2000}
+  numberOfItterations: 5
+  dungeonSize: {x: 200, y: 200}
   minRoomSize: {x: 9, y: 9}
-  rooms:
-  - roomPrefab: {fileID: 8414504533855597787, guid: 38ee0969044ad9841856dd2b0c0692b8, type: 3}
-    size: {x: 9, y: 9}
-  - roomPrefab: {fileID: 6712430428198880449, guid: 7d6e504867cbb9240bbdc9e7d11ebde5, type: 3}
-    size: {x: 3, y: 15}
-  - roomPrefab: {fileID: 3549703842848199051, guid: c6fb016617182454da0862f838726ab5, type: 3}
-    size: {x: 27, y: 27}
+  rooms: []
   corridor: {fileID: 451882589754301966, guid: b4eb1af984c3be742b7eeeff4c58efdb, type: 3}
   spawnedRooms: []
+  tlTile: {fileID: 836392930766269597, guid: dde5b72b319367e4c8935e3a7fb556fc, type: 3}
+  tmTile: {fileID: 836392930766269597, guid: a01c4608e3d943e4d9b54257ed8f4d3f, type: 3}
+  trTile: {fileID: 836392930766269597, guid: e331c0251120d714fb84be9bba11d056, type: 3}
+  mlTile: {fileID: 836392930766269597, guid: 0532fbd006b9b444f8b5a37d4f2ecdd3, type: 3}
+  mmTile: {fileID: 836392930766269597, guid: d0dabf687afe4ac41b1b39d1d39f2065, type: 3}
+  mrTile: {fileID: 836392930766269597, guid: 391d96f970e1027448bcdb6a805b5c17, type: 3}
+  blTile: {fileID: 836392930766269597, guid: 7f1e5178d2df84f4a8715149292fbf98, type: 3}
+  bmTile: {fileID: 836392930766269597, guid: 86b9b0d42c07399489beb25f74a99623, type: 3}
+  brTile: {fileID: 836392930766269597, guid: 7f1e5178d2df84f4a8715149292fbf98, type: 3}
 --- !u!4 &998241708
 Transform:
   m_ObjectHideFlags: 0
