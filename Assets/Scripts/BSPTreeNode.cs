@@ -78,7 +78,7 @@ public class BSPTreeNode
     {
         foreach (Vector2Int point in route)
         {
-            if (!container.Contains(point))
+            if (!room.Contains(point))
             {
                 continue;
             }
