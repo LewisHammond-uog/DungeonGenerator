@@ -228,7 +228,24 @@ public class Generator : MonoBehaviour
         {
             if (node.IsOnHotPath)
             {
-                startMapTexture.SetPixel((int)node.container.center.x, (int)node.container.center.y, Color.magenta);
+                Vector2Int roomCenterSpawnPos = Vector2Int.RoundToInt(node.room.center);
+                Vector2Int roomCenter = node.roomTileMapComp.GetRoomCenterOnGrid();
+                
+                for (int x = 0; x < node.room.size.x; x++)
+                {
+                    for (int y = 0; y < node.room.size.y; y++)
+                    {
+
+                        Vector2Int mainMapPos = new Vector2Int(roomCenterSpawnPos.x + x - roomCenter.x,
+                            roomCenterSpawnPos.y + y - roomCenter.y);
+
+                        if (map.TileMap[mainMapPos.x, mainMapPos.y] != null)
+                        {
+                            startMapTexture.SetPixel(mainMapPos.x, mainMapPos.y, Color.magenta);
+                        }
+                        
+                    }
+                }
             }
         }
         startMapTexture.Apply();

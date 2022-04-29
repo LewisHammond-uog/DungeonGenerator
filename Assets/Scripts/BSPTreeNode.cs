@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 
@@ -7,6 +8,7 @@ public class BSPTreeNode
 {
     public RectInt container;
     public RectInt room;
+    public RoomTileMap roomTileMapComp;
     public BSPTreeNode parent;
     public BSPTreeNode left;
     public BSPTreeNode right;

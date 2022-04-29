@@ -61,6 +61,7 @@ public class TileMap3D : MonoBehaviour
         node.room = new RectInt(roomWorldPos, roomSize);
         
         //Add to tilemap
+        node.roomTileMapComp = roomMapComp;
         GameObject[,] roomMap = roomMapComp.map;
         for (int x = 0; x < roomMapComp.mapSize.x; x++)
         {
