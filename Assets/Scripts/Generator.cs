@@ -73,6 +73,10 @@ public class Generator : MonoBehaviour
         if (!distFromStartMap.IsFinished)
         {
             distFromStartMap.Update();
+            distFromStartMap.Update();
+            distFromStartMap.Update();
+            distFromStartMap.Update();
+            distFromStartMap.Update();
             distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
         }
         else if(!shortestRouteFinder.IsFinished)
@@ -80,6 +84,8 @@ public class Generator : MonoBehaviour
             shortestRouteFinder.Initialize(distFromStartMap);
             shortestRouteFinder.PlotPathToStartOfMap(new Vector2Int((int)tree.EndRoom.container.center.x, (int)tree.EndRoom.container.center.y));
             shortestRouteFinder.AddPathToTexture(ref startMapTexture);
+            MarkHotPathRooms(shortestRouteFinder.route);
+            DoHotPathColour();
         }
     }
 
@@ -97,7 +103,7 @@ public class Generator : MonoBehaviour
         foreach (BSPTreeNode node in leafNodes)
         {
             Vector2Int spawnPos = Vector2Int.RoundToInt(node.container.center);
-            map.InsertRoom(spawnPos, RoomUtils.GetRoomPrefabForNode(node, rooms));
+            map.InsertRoom(node, spawnPos, RoomUtils.GetRoomPrefabForNode(node, rooms));
         }
         
     }
@@ -202,6 +208,30 @@ public class Generator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void MarkHotPathRooms(List<Vector2Int> route)
+    {
+        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
+        tree.GetLeafNodes(ref leafNodes);
+        foreach (BSPTreeNode node in leafNodes)
+        {
+            node.DetermineIsOnHotPath(route);
+        }
+    }
+
+    private void DoHotPathColour()
+    {
+        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
+        tree.GetLeafNodes(ref leafNodes);
+        foreach (BSPTreeNode node in leafNodes)
+        {
+            if (node.IsOnHotPath)
+            {
+                startMapTexture.SetPixel((int)node.container.center.x, (int)node.container.center.y, Color.magenta);
+            }
+        }
+        startMapTexture.Apply();
     }
 
 

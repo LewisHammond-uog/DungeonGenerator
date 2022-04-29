@@ -22,8 +22,6 @@ public class BSPGraphVisualizer : MonoBehaviour
         
         //Draw the head of the tree
         DrawNode(treeRoot, pos);
-        treeRoot.isDrawn = true;
-        
 
         const float xSpacing = 100f;
         const float ySpacing = 150f;

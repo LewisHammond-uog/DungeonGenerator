@@ -34,7 +34,7 @@ public class TileMap3D : MonoBehaviour
         SetTileInMap(pos, tile);
     }
 
-    public void InsertRoom(Vector2Int roomCenterSpawnPos, GameObject roomPrefab)
+    public void InsertRoom(BSPTreeNode node, Vector2Int roomCenterSpawnPos, GameObject roomPrefab)
     {
         Vector3 posV3 = new Vector3(roomCenterSpawnPos.x, 0, roomCenterSpawnPos.y);
         GameObject room = Instantiate(roomPrefab, posV3,  Quaternion.identity);
@@ -53,6 +53,12 @@ public class TileMap3D : MonoBehaviour
         //Get room center - move room to be centered on grid
         Vector2Int roomCenter = roomMapComp.GetRoomCenterOnGrid();
         room.transform.position -= new Vector3(roomCenter.x, 0, roomCenter.y);
+        
+        //Set node
+        Vector2Int roomSize = roomMapComp.mapSize;
+        Vector2Int roomWorldPos = new Vector2Int(Mathf.RoundToInt(room.transform.position.x),
+            Mathf.RoundToInt(room.transform.position.z));
+        node.room = new RectInt(roomWorldPos, roomSize);
         
         //Add to tilemap
         GameObject[,] roomMap = roomMapComp.map;

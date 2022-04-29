@@ -6,10 +6,13 @@ using UnityEngine;
 public class BSPTreeNode
 {
     public RectInt container;
+    public RectInt room;
     public BSPTreeNode parent;
     public BSPTreeNode left;
     public BSPTreeNode right;
-    public bool isDrawn = false;
+
+
+    public bool IsOnHotPath { private set; get; } = false;
 
     //The minium size to allow a split
     private static Vector2Int minSplitSize;
@@ -64,6 +67,23 @@ public class BSPTreeNode
         }
         
         return treeNode;
+    }
+
+    /// <summary>
+    /// Determine if this node is on the hotpath
+    /// </summary>
+    public void DetermineIsOnHotPath(List<Vector2Int> route)
+    {
+        foreach (Vector2Int point in route)
+        {
+            if (!container.Contains(point))
+            {
+                continue;
+            }
+            
+            IsOnHotPath = true;
+            return;
+        }
     }
 
     /// <summary>
