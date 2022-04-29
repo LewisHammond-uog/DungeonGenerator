@@ -6,6 +6,7 @@ public class TileMap3D : MonoBehaviour
 {
     protected Vector2Int mapSize;
     protected GameObject[,] map;
+    public GameObject[,] TileMap => map;
 
     [SerializeField] private bool drawDebugTiles = false;
     

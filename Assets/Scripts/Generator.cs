@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
@@ -33,8 +34,8 @@ public class Generator : MonoBehaviour
     #endregion
 
     private TileMap3D map;
-    
-    
+    private DijkstraMap dm;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +46,19 @@ public class Generator : MonoBehaviour
         GenerateSpace();
         GenerateCorridors();
         PaintTiles();
+        tree.ChooseStartAndEndNode();
         //StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
+
+        dm = new DijkstraMap();
+        dm.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
+            , map.TileMap);
     }
+
+    private void Update()
+    {
+        dm.Update();
+    }
+
     public void GenerateSpace()
     {
         tree = new BSPTree(numberOfItterations, dungeonSize, minRoomSize);
@@ -168,8 +180,6 @@ public class Generator : MonoBehaviour
             }
         }
     }
-    
-    
 
 
 #if UNITY_EDITOR

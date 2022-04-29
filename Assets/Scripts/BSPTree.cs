@@ -4,7 +4,10 @@ using UnityEngine;
 public class BSPTree
 {
     public BSPTreeNode RootNode { get; private set; }
-    
+
+    public BSPTreeNode StartRoom { get; private set; }
+    public BSPTreeNode EndRoom { get; private set; }
+
     public BSPTree(int numberOfItterations, Vector2Int dungeonSize, Vector2Int minRoomSize)
     {
         BSPTreeNode.MinRoomSize = minRoomSize;
@@ -23,7 +26,7 @@ public class BSPTree
     {
         return GetHeight(RootNode);
     }
-    
+
     /// <summary>
     /// Get the height from a given root node
     /// </summary>
@@ -72,6 +75,32 @@ public class BSPTree
         {
             GetLeafNodes(root.right, ref leafNodes);
         }
+    }
+
+    /// <summary>
+    /// Choose a start and end node
+    /// </summary>
+    public void ChooseStartAndEndNode()
+    {
+        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
+        GetLeafNodes(ref leafNodes);
+
+        if (leafNodes.Count < 2)
+        {
+            Debug.LogError("Not enough nodes for start ned");
+            return;
+        }
+
+        int startIndex = Random.Range(0, leafNodes.Count);
+        int endIndex = Random.Range(0, leafNodes.Count);
+        //Ensure end node is not start node
+        while (endIndex == startIndex)
+        {
+            endIndex = Random.Range(0, leafNodes.Count);
+        }
+
+        StartRoom = leafNodes[startIndex];
+        EndRoom = leafNodes[endIndex];
     }
     
 }
