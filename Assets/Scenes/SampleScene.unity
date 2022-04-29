@@ -258,7 +258,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 3}
-  m_SizeDelta: {x: 200, y: 100}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &164976290
 MonoBehaviour:
@@ -386,7 +386,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 317770547}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 46}
+  m_LocalPosition: {x: 0, y: 0, z: 96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 164976289}
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfItterations: 9
   corridorThickness: 2
-  dungeonSize: {x: 200, y: 100}
+  dungeonSize: {x: 200, y: 200}
   minRoomSize: {x: 6, y: 6}
   debugTile: {fileID: 451882589754301966, guid: 059041b8fed61a0489dd63f37812a1b1, type: 3}
   rooms:
@@ -688,6 +688,35 @@ MonoBehaviour:
   bmTile: {fileID: 4800298893490477974, guid: c24a98aa4b6318c4f881e77e5087742c, type: 3}
   brTile: {fileID: 4800298893490477974, guid: 19283a1624205c448b70df12318f60d6, type: 3}
   testImage: {fileID: 164976290}
+  distGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 0.36862746, b: 0, a: 1}
+    key2: {r: 1, g: 0.89414346, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 7325
+    ctime1: 23901
+    ctime2: 61487
+    ctime3: 65535
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 65535
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 4
+    m_NumAlphaKeys: 2
 --- !u!4 &998241708
 Transform:
   m_ObjectHideFlags: 0

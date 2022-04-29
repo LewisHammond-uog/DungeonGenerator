@@ -23,6 +23,8 @@ public class DijkstraMap
 
     public bool finished;
 
+    public Gradient grad;
+
 
     public void Initialize(Vector2Int start, GameObject[,] cells)
     {
@@ -130,8 +132,8 @@ public class DijkstraMap
                 }
                 else
                 {
-                    float texValue = distance.Remap(0, maxDistance, 1, 0);
-                    tex.SetPixel(x,y, new Color(0,0,texValue,1));
+                    float texValue = distance.Remap(0, maxDistance, 0, 1);
+                    tex.SetPixel(x,y, grad.Evaluate(texValue));
                 }
             }
         }

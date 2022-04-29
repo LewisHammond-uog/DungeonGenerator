@@ -38,6 +38,7 @@ public class Generator : MonoBehaviour
     private DijkstraMap dm;
 
     [SerializeField] private Image testImage;
+    [SerializeField] private Gradient distGradient;
 
     // Start is called before the first frame update
     void Start()
@@ -56,14 +57,18 @@ public class Generator : MonoBehaviour
         dm.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
             , map.TileMap);
 
+        dm.grad = distGradient;
+
 
     }
 
     private void Update()
     {
         dm.Update();
+        dm.Update();
+        dm.Update();
         
-        Sprite s = Sprite.Create(dm.GetMapAsTexture(), new Rect(0,0,200,100), new Vector2(0,0));
+        Sprite s = Sprite.Create(dm.GetMapAsTexture(), new Rect(0,0,200,200), new Vector2(0,0));
         testImage.sprite = s;
     }
 
