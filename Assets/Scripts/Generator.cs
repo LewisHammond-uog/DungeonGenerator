@@ -35,6 +35,7 @@ public class Generator : MonoBehaviour
 
     private TileMap3D map;
     private DijkstraMap distFromStartMap;
+    private Pathfinder shortestRouteFinder;
 
     [SerializeField] private Image testImage;
     [SerializeField] private Gradient distGradient;
@@ -60,16 +61,26 @@ public class Generator : MonoBehaviour
         testImage.rectTransform.sizeDelta = dungeonSize;
         testImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
         
-        
         distFromStartMap = new DijkstraMap();
         distFromStartMap.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
             , map.TileMap);
+
+        shortestRouteFinder = new Pathfinder();
     }
 
     private void Update()
     {
-        distFromStartMap.Update();
-        distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
+        if (!distFromStartMap.IsFinished)
+        {
+            distFromStartMap.Update();
+            distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
+        }
+        else if(!shortestRouteFinder.IsFinished)
+        {
+            shortestRouteFinder.Initialize(distFromStartMap);
+            shortestRouteFinder.PlotPathToStartOfMap(new Vector2Int((int)tree.EndRoom.container.center.x, (int)tree.EndRoom.container.center.y));
+            shortestRouteFinder.AddPathToTexture(ref startMapTexture);
+        }
     }
 
     public void GenerateSpace()
