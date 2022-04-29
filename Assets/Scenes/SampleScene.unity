@@ -668,7 +668,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfItterations: 9
   corridorThickness: 2
-  dungeonSize: {x: 100, y: 100}
+  dungeonSize: {x: 200, y: 200}
   minRoomSize: {x: 7, y: 7}
   debugTile: {fileID: 451882589754301966, guid: 059041b8fed61a0489dd63f37812a1b1, type: 3}
   rooms:
