@@ -21,10 +21,7 @@ public class DijkstraMap
     //Max distance in this map
     private float maxDistance;
 
-    public bool finished;
-
-    public Gradient grad;
-
+    private bool finished;
 
     public void Initialize(Vector2Int start, GameObject[,] cells)
     {
@@ -110,9 +107,18 @@ public class DijkstraMap
         }
     }
 
-    public Texture2D GetMapAsTexture()
+    /// <summary>
+    /// Get the map as a texture
+    /// </summary>
+    /// <param name="gradient">Gradient to use as a texture</param>
+    /// <returns></returns>
+    public void GetMapAsTexture(ref Texture2D tex, Gradient gradient)
     {
-        Texture2D tex = new Texture2D(gridSize.x, gridSize.y);
+        if (tex == null)
+        {
+            return;
+        }
+        
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
@@ -133,12 +139,11 @@ public class DijkstraMap
                 else
                 {
                     float texValue = distance.Remap(0, maxDistance, 0, 1);
-                    tex.SetPixel(x,y, grad.Evaluate(texValue));
+                    tex.SetPixel(x,y, gradient.Evaluate(texValue));
                 }
             }
         }
         tex.Apply();
-        return tex;
     }
 
     /// <summary>

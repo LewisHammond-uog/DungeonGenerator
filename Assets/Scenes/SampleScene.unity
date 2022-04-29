@@ -386,7 +386,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 317770547}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 96}
+  m_LocalPosition: {x: 0, y: 0, z: 96.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 164976289}
@@ -395,7 +395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 1}
+  m_AnchoredPosition: {x: 99.5, y: 1}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &579823457
@@ -668,14 +668,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfItterations: 9
   corridorThickness: 2
-  dungeonSize: {x: 200, y: 200}
-  minRoomSize: {x: 6, y: 6}
+  dungeonSize: {x: 100, y: 100}
+  minRoomSize: {x: 7, y: 7}
   debugTile: {fileID: 451882589754301966, guid: 059041b8fed61a0489dd63f37812a1b1, type: 3}
   rooms:
   - roomPrefab: {fileID: 3805796202354055709, guid: b460f0cea5fb590449cc2f46043f5945, type: 3}
-    size: {x: 6, y: 6}
+    size: {x: 7, y: 7}
   - roomPrefab: {fileID: 3805796202354055709, guid: 59d0ce00278b6624f85156e06066f2ca, type: 3}
-    size: {x: 11, y: 11}
+    size: {x: 12, y: 12}
   corridor: {fileID: 451882589754301966, guid: b4eb1af984c3be742b7eeeff4c58efdb, type: 3}
   spawnedRooms: []
   tlTile: {fileID: 4800298893490477974, guid: a20022a7111627a40aad106ad3835b0e, type: 3}
@@ -691,21 +691,21 @@ MonoBehaviour:
   distGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0.36862746, b: 0, a: 1}
-    key2: {r: 1, g: 0.89414346, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
+    key1: {r: 1, g: 0.25490198, b: 0, a: 1}
+    key2: {r: 1, g: 0.43137255, b: 0, a: 0}
+    key3: {r: 1, g: 0.6117647, b: 0, a: 0}
+    key4: {r: 1, g: 0.6745098, b: 0, a: 0}
+    key5: {r: 1, g: 0.8, b: 0, a: 0}
+    key6: {r: 1, g: 0.89414346, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 7325
-    ctime1: 23901
-    ctime2: 61487
-    ctime3: 65535
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
+    ctime0: 0
+    ctime1: 8288
+    ctime2: 21203
+    ctime3: 32960
+    ctime4: 42791
+    ctime5: 53392
+    ctime6: 61487
+    ctime7: 65535
     atime0: 0
     atime1: 65535
     atime2: 65535
@@ -715,7 +715,7 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
-    m_NumColorKeys: 4
+    m_NumColorKeys: 8
     m_NumAlphaKeys: 2
 --- !u!4 &998241708
 Transform:

@@ -35,10 +35,11 @@ public class Generator : MonoBehaviour
     #endregion
 
     private TileMap3D map;
-    private DijkstraMap dm;
+    private DijkstraMap distFromStartMap;
 
     [SerializeField] private Image testImage;
     [SerializeField] private Gradient distGradient;
+    private Texture2D startMapTexture;
 
     // Start is called before the first frame update
     void Start()
@@ -53,23 +54,23 @@ public class Generator : MonoBehaviour
         tree.ChooseStartAndEndNode();
         //StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
 
-        dm = new DijkstraMap();
-        dm.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
+        //Sprite for dist from start map
+        startMapTexture = new Texture2D(dungeonSize.x, dungeonSize.y);
+        Sprite distanceMapSprite = Sprite.Create(startMapTexture, new Rect(0,0,dungeonSize.x,dungeonSize.y), new Vector2(0,0));
+        testImage.sprite = distanceMapSprite;
+        testImage.rectTransform.sizeDelta = dungeonSize;
+        testImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
+        
+        
+        distFromStartMap = new DijkstraMap();
+        distFromStartMap.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
             , map.TileMap);
-
-        dm.grad = distGradient;
-
-
     }
 
     private void Update()
     {
-        dm.Update();
-        dm.Update();
-        dm.Update();
-        
-        Sprite s = Sprite.Create(dm.GetMapAsTexture(), new Rect(0,0,200,200), new Vector2(0,0));
-        testImage.sprite = s;
+        distFromStartMap.Update();
+        distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
     }
 
     public void GenerateSpace()
