@@ -67,7 +67,6 @@ public class Generator : MonoBehaviour
 
     private void GenerateRooms()
     {
-
         List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
         tree.GetLeafNodes(ref leafNodes);
 

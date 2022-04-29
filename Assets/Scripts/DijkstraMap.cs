@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class DijkstraMap
@@ -27,7 +28,7 @@ public class DijkstraMap
             return;
         }
 
-        Vector2Int gridSize = new Vector2Int(cells.GetLength(0), cells.GetLength(1));
+        gridSize = new Vector2Int(cells.GetLength(0), cells.GetLength(1));
         this.cells = cells;
 
         distances = new float[gridSize.x, gridSize.y];
