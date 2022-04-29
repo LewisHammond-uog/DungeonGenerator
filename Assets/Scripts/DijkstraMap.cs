@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using FloatExtensions;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,7 +18,10 @@ public class DijkstraMap
 
     private Vector2Int currentPos;
 
-    private bool finished;
+    //Max distance in this map
+    private float maxDistance;
+
+    public bool finished;
 
 
     public void Initialize(Vector2Int start, GameObject[,] cells)
@@ -39,7 +43,9 @@ public class DijkstraMap
         InitializeUnvisitedSet();
 
         currentPos = start;
-        distances[start.x, start.y] = 0.0f;
+        distances[start.x, start.y] = 0f;
+
+        maxDistance = 0f;
 
         finished = false;
     }
@@ -72,6 +78,11 @@ public class DijkstraMap
             float tentativeDist = distances[tentative.x, tentative.y];
             tentativeDist = currentPosDist + 1 > tentativeDist ? tentativeDist : currentPosDist + 1;
             distances[tentative.x, tentative.y] = tentativeDist;
+
+            if (tentativeDist > maxDistance)
+            {
+                maxDistance = tentativeDist;
+            }
         }
         
         //Remove current pos from the tentative and unvisited set
@@ -95,6 +106,37 @@ public class DijkstraMap
         {
             finished = true;
         }
+    }
+
+    public Texture2D GetMapAsTexture()
+    {
+        Texture2D tex = new Texture2D(gridSize.x, gridSize.y);
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                
+                float distance = distances[x, y];
+
+                if (distance == 0f)
+                {
+                    tex.SetPixel(x,y,new Color(0,1,0,1));
+                    continue;
+                }
+                
+                if (float.IsPositiveInfinity(distance))
+                {
+                    tex.SetPixel(x,y, new Color(0,0,0,0));
+                }
+                else
+                {
+                    float texValue = distance.Remap(0, maxDistance, 1, 0);
+                    tex.SetPixel(x,y, new Color(0,0,texValue,1));
+                }
+            }
+        }
+        tex.Apply();
+        return tex;
     }
 
     /// <summary>

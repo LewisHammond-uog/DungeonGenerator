@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Generator : MonoBehaviour
 {
@@ -36,6 +37,8 @@ public class Generator : MonoBehaviour
     private TileMap3D map;
     private DijkstraMap dm;
 
+    [SerializeField] private Image testImage;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,11 +55,16 @@ public class Generator : MonoBehaviour
         dm = new DijkstraMap();
         dm.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
             , map.TileMap);
+
+
     }
 
     private void Update()
     {
         dm.Update();
+        
+        Sprite s = Sprite.Create(dm.GetMapAsTexture(), new Rect(0,0,200,100), new Vector2(0,0));
+        testImage.sprite = s;
     }
 
     public void GenerateSpace()
