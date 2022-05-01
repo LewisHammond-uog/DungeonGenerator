@@ -35,6 +35,7 @@ public class Generator : MonoBehaviour
 
     private TileMap3D map;
     private DijkstraMap distFromStartMap;
+    private Pathfinder shortestRouteFinder;
 
     [SerializeField] private Image testImage;
     [SerializeField] private Gradient distGradient;
@@ -60,16 +61,32 @@ public class Generator : MonoBehaviour
         testImage.rectTransform.sizeDelta = dungeonSize;
         testImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
         
-        
         distFromStartMap = new DijkstraMap();
         distFromStartMap.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
             , map.TileMap);
+
+        shortestRouteFinder = new Pathfinder();
     }
 
     private void Update()
     {
-        distFromStartMap.Update();
-        distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
+        if (!distFromStartMap.IsFinished)
+        {
+            distFromStartMap.Update();
+            distFromStartMap.Update();
+            distFromStartMap.Update();
+            distFromStartMap.Update();
+            distFromStartMap.Update();
+            distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
+        }
+        else if(!shortestRouteFinder.IsFinished)
+        {
+            shortestRouteFinder.Initialize(distFromStartMap);
+            shortestRouteFinder.PlotPathToStartOfMap(new Vector2Int((int)tree.EndRoom.container.center.x, (int)tree.EndRoom.container.center.y));
+            shortestRouteFinder.AddPathToTexture(ref startMapTexture);
+            MarkHotPathRooms(shortestRouteFinder.route);
+            DoHotPathColour();
+        }
     }
 
     public void GenerateSpace()
@@ -86,7 +103,7 @@ public class Generator : MonoBehaviour
         foreach (BSPTreeNode node in leafNodes)
         {
             Vector2Int spawnPos = Vector2Int.RoundToInt(node.container.center);
-            map.InsertRoom(spawnPos, RoomUtils.GetRoomPrefabForNode(node, rooms));
+            map.InsertRoom(node, spawnPos, RoomUtils.GetRoomPrefabForNode(node, rooms));
         }
         
     }
@@ -191,6 +208,47 @@ public class Generator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void MarkHotPathRooms(List<Vector2Int> route)
+    {
+        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
+        tree.GetLeafNodes(ref leafNodes);
+        foreach (BSPTreeNode node in leafNodes)
+        {
+            node.DetermineIsOnHotPath(route);
+        }
+    }
+
+    private void DoHotPathColour()
+    {
+        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
+        tree.GetLeafNodes(ref leafNodes);
+        foreach (BSPTreeNode node in leafNodes)
+        {
+            if (node.IsOnHotPath)
+            {
+                Vector2Int roomCenterSpawnPos = Vector2Int.RoundToInt(node.room.center);
+                Vector2Int roomCenter = node.roomTileMapComp.GetRoomCenterOnGrid();
+                
+                for (int x = 0; x < node.room.size.x; x++)
+                {
+                    for (int y = 0; y < node.room.size.y; y++)
+                    {
+
+                        Vector2Int mainMapPos = new Vector2Int(roomCenterSpawnPos.x + x - roomCenter.x,
+                            roomCenterSpawnPos.y + y - roomCenter.y);
+
+                        if (map.TileMap[mainMapPos.x, mainMapPos.y] != null)
+                        {
+                            startMapTexture.SetPixel(mainMapPos.x, mainMapPos.y, Color.magenta);
+                        }
+                        
+                    }
+                }
+            }
+        }
+        startMapTexture.Apply();
     }
 
 

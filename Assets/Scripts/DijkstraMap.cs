@@ -8,11 +8,12 @@ using UnityEngine;
 public class DijkstraMap
 {
     //Map of cells
+    public Vector2Int StartPos { get; private set; }
     private Vector2Int gridSize;
     private GameObject[,] cells;
     
     //Dijkstra arrays
-    private float[,] distances; //distances from start point
+    public float[,] distances { private set; get; }  //distances from start point
     private HashSet<Vector2Int> tentativesSet;
     private HashSet<Vector2Int> unvisitedSet;
 
@@ -21,7 +22,7 @@ public class DijkstraMap
     //Max distance in this map
     private float maxDistance;
 
-    private bool finished;
+    public bool IsFinished { get; private set; }
 
     public void Initialize(Vector2Int start, GameObject[,] cells)
     {
@@ -41,17 +42,18 @@ public class DijkstraMap
         InitializeDistances();
         InitializeUnvisitedSet();
 
+        StartPos = start;
         currentPos = start;
         distances[start.x, start.y] = 0f;
 
         maxDistance = 0f;
 
-        finished = false;
+        IsFinished = false;
     }
 
     public void Update()
     {
-        if (!finished)
+        if (!IsFinished)
         {
             FillDijkstraMap();
         }
@@ -103,7 +105,7 @@ public class DijkstraMap
 
         if (tentativesSet.Count == 0)
         {
-            finished = true;
+            IsFinished = true;
         }
     }
 
@@ -150,15 +152,15 @@ public class DijkstraMap
     /// Find neighbour gameobjects of a given position
     /// </summary>
     /// <param name="pos"></param>
-    private List<Vector2Int?> FindNeighbours(Vector2Int pos, bool ignoreUnvisitedSet = false)
+    public List<Vector2Int?> FindNeighbours(Vector2Int pos, bool ignoreUnvisitedSet = false)
     {
         List<Vector2Int?> neighboursList = new List<Vector2Int?>
         {
             //Get the neighbours in the cardinal NESW directions
-            GetNeighbour(pos, Vector2Int.left),
-            GetNeighbour(pos, Vector2Int.right),
-            GetNeighbour(pos, Vector2Int.up),
-            GetNeighbour(pos, Vector2Int.down)
+            GetNeighbour(pos, Vector2Int.left, ignoreUnvisitedSet),
+            GetNeighbour(pos, Vector2Int.right, ignoreUnvisitedSet),
+            GetNeighbour(pos, Vector2Int.up, ignoreUnvisitedSet),
+            GetNeighbour(pos, Vector2Int.down, ignoreUnvisitedSet)
         };
 
         return neighboursList;
@@ -181,6 +183,7 @@ public class DijkstraMap
             return null;
         }
         
+
         return neighbourPos;
     }
 
