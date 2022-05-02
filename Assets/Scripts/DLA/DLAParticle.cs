@@ -9,6 +9,11 @@ public class DLAParticle : MonoBehaviour
     [SerializeField] private float speed;
     private Vector3 direction;
 
+    [SerializeField]
+    private GameObject spawnTile;
+
+    private const string WallTag = "Wall";
+    
     private void Start()
     {
         float x = Random.Range(-1f, 1f);
@@ -29,9 +34,17 @@ public class DLAParticle : MonoBehaviour
             return;
         }
 
-        Vector3 objectPos = other.transform.parent.parent.position;
-        Vector2 pos = new Vector2(objectPos.x, objectPos.z);
-        FindObjectOfType<Generator>().TileMap.DeleteTile(Vector2Int.RoundToInt(pos));
-        Destroy(gameObject);
+        if (other.CompareTag(WallTag))
+        {
+            direction = Vector3.Reflect(direction, other.transform.right);
+        }
+
+        if (other.transform.parent && other.transform.parent.parent)
+        {
+            Vector3 objectPos = other.transform.parent.parent.position;
+            Vector2 pos = new Vector2(objectPos.x, objectPos.z);
+            FindObjectOfType<Generator>().TileMap.DeleteTile(Vector2Int.RoundToInt(pos));
+            Destroy(gameObject);
+        }
     }
 }

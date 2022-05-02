@@ -37,8 +37,7 @@ public class ParticleSpawner : MonoBehaviour
                randPos.Set(x, y);
 
           } while (tilemap.GetTile(randPos) != null);
-
-          Debug.Log(randPos);
+          
           
           GameObject partcile = Instantiate(particlePrefab, new Vector3(randPos.x, 0, randPos.y), Quaternion.identity);
      }
