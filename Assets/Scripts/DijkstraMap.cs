@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FloatExtensions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DijkstraMap
 {
@@ -146,6 +147,7 @@ public class DijkstraMap
             }
         }
         tex.Apply();
+        tex.filterMode = FilterMode.Point;
     }
 
     /// <summary>

@@ -34,6 +34,7 @@ public class Generator : MonoBehaviour
     #endregion
 
     private TileMap3D map;
+    public TileMap3D TileMap => map;
     private DijkstraMap distFromStartMap;
     private Pathfinder shortestRouteFinder;
 
@@ -42,7 +43,7 @@ public class Generator : MonoBehaviour
     private Texture2D startMapTexture;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         map = gameObject.AddComponent<TileMap3D>();
         map.Init(dungeonSize);
