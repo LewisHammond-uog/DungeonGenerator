@@ -9,14 +9,12 @@ public class DLAParticle : MonoBehaviour
     [SerializeField] private float speed;
     private Vector3 direction;
 
-    [SerializeField]
-    private GameObject spawnTile;
-    
     private void Start()
     {
         float x = Random.Range(-1f, 1f);
         float y = Random.Range(-1f, 1f);
         direction = new Vector3(x, 0, y);
+        direction.Normalize();
     }
 
     private void Update()
