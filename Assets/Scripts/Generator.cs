@@ -34,6 +34,7 @@ public class Generator : MonoBehaviour
     #endregion
 
     private TileMap3D map;
+    public TileMap3D TileMap => map;
     private DijkstraMap distFromStartMap;
     private Pathfinder shortestRouteFinder;
 
