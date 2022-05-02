@@ -43,7 +43,7 @@ public class Generator : MonoBehaviour
     private Texture2D startMapTexture;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         map = gameObject.AddComponent<TileMap3D>();
         map.Init(dungeonSize);

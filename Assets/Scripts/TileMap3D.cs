@@ -5,6 +5,7 @@ using UnityEngine;
 public class TileMap3D : MonoBehaviour
 {
     protected Vector2Int mapSize;
+    public Vector2Int Size => mapSize;
     protected GameObject[,] map;
     public GameObject[,] TileMap => map;
 
@@ -81,6 +82,11 @@ public class TileMap3D : MonoBehaviour
                 SetTileInMap(mainMapPos, floorObj);
             }
         }
+    }
+
+    public void DeleteTile(Vector2Int pos)
+    {
+        RemoveTile(pos);
     }
 
     /// <summary>

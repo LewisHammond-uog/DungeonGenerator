@@ -26,8 +26,14 @@ public class DLAParticle : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Vector2Int pos = new Vector2Int((int) other.transform.position.x, (int) other.transform.position.z);
-        FindObjectOfType<Generator>().TileMap.SpawnTile(pos, spawnTile);
+        if (other.TryGetComponent(out DLAParticle _))
+        {
+            return;
+        }
+
+        Vector3 objectPos = other.transform.parent.parent.position;
+        Vector2 pos = new Vector2(objectPos.x, objectPos.z);
+        FindObjectOfType<Generator>().TileMap.DeleteTile(Vector2Int.RoundToInt(pos));
         Destroy(gameObject);
     }
 }
