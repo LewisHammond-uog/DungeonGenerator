@@ -13,14 +13,11 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private Vector2Int dungeonSize;
     [SerializeField] private Vector2Int minRoomSize;
-    [SerializeField] private GameObject debugTile;
 
     [SerializeField] private RoomInfo[] rooms;
 
     [SerializeField] private GameObject corridor;
 
-    [SerializeField] private List<GameObject> spawnedRooms;
-    
     #region Tiles
     [HideInInspector] public GameObject tlTile;
     [HideInInspector] public GameObject tmTile;
@@ -41,20 +38,12 @@ public class Generator : MonoBehaviour
     [SerializeField] private Image testImage;
     [SerializeField] private Gradient distGradient;
     private Texture2D startMapTexture;
-
-    // Start is called before the first frame update
-    void Awake()
+    
+    public void Init()
     {
         map = gameObject.AddComponent<TileMap3D>();
         map.Init(dungeonSize);
         
-        
-        GenerateSpace();
-        GenerateCorridors();
-        PaintTiles();
-        tree.ChooseStartAndEndNode();
-        //StartCoroutine(GetComponent<BSPGraphVisualizer>().DrawTree(tree.RootNode, Vector2.zero));
-
         //Sprite for dist from start map
         startMapTexture = new Texture2D(dungeonSize.x, dungeonSize.y);
         Sprite distanceMapSprite = Sprite.Create(startMapTexture, new Rect(0,0,dungeonSize.x,dungeonSize.y), new Vector2(0,0));
@@ -62,32 +51,7 @@ public class Generator : MonoBehaviour
         testImage.rectTransform.sizeDelta = dungeonSize;
         testImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
         
-        distFromStartMap = new DijkstraMap();
-        distFromStartMap.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
-            , map.TileMap);
-
         shortestRouteFinder = new Pathfinder();
-    }
-
-    private void Update()
-    {
-        if (!distFromStartMap.IsFinished)
-        {
-            distFromStartMap.Update();
-            distFromStartMap.Update();
-            distFromStartMap.Update();
-            distFromStartMap.Update();
-            distFromStartMap.Update();
-            distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
-        }
-        else if(!shortestRouteFinder.IsFinished)
-        {
-            shortestRouteFinder.Initialize(distFromStartMap);
-            shortestRouteFinder.PlotPathToStartOfMap(new Vector2Int((int)tree.EndRoom.container.center.x, (int)tree.EndRoom.container.center.y));
-            shortestRouteFinder.AddPathToTexture(ref startMapTexture);
-            MarkHotPathRooms(shortestRouteFinder.route);
-            DoHotPathColour();
-        }
     }
 
     public void GenerateSpace()
@@ -109,55 +73,57 @@ public class Generator : MonoBehaviour
         
     }
 
-    private void GenerateCorridors()
+    public void GenerateCorridors()
     {
         if (tree != null && tree.RootNode != null)
         {
            GenerateCorridorsNode(tree.RootNode);
         }
     }
-    
-    public void GenerateCorridorsNode(BSPTreeNode node)
+
+    private void GenerateCorridorsNode(BSPTreeNode node)
     {
-        if (node.IsInternal)
+        if (!node.IsInternal)
         {
-            RectInt leftContainer = node.left.container;
-            RectInt rightContainer = node.right.container;
+            return;
+        }
+        
+        RectInt leftContainer = node.left.container;
+        RectInt rightContainer = node.right.container;
             
-            Vector2 leftCenter = leftContainer.center;
-            Vector2 rightCenter = rightContainer.center;
-            Vector2 direction = (rightCenter - leftCenter).normalized;
+        Vector2 leftCenter = leftContainer.center;
+        Vector2 rightCenter = rightContainer.center;
+        Vector2 direction = (rightCenter - leftCenter).normalized;
             
-            while (Vector2.Distance(leftCenter, rightCenter) > 0.51f)
+        while (Vector2.Distance(leftCenter, rightCenter) > 0.51f)
+        {
+            if (direction.Equals(Vector2.right))
             {
-                if (direction.Equals(Vector2.right))
+                for (int i = 0; i < corridorThickness; i++)
                 {
-                    for (int i = 0; i < corridorThickness; i++)
-                    {
-                        map.SpawnTile(new Vector2Int((int) leftCenter.x, (int) leftCenter.y + i), corridor);
-                    }
-
-                }else if (direction.Equals(Vector2.up))
-                {
-                    for (int i = 0; i < corridorThickness; i++)
-                    {
-                        map.SpawnTile(new Vector2Int((int) leftCenter.x + i, (int) leftCenter.y), corridor);
-                    }
+                    map.SpawnTile(new Vector2Int((int) leftCenter.x, (int) leftCenter.y + i), corridor);
                 }
-                
-                leftCenter.x += direction.x;
-                leftCenter.y += direction.y;
-            }
-            
-            if (node.left != null)
-            {
-                GenerateCorridorsNode(node.left);
-            }
 
-            if (node.right != null)
+            }else if (direction.Equals(Vector2.up))
             {
-               GenerateCorridorsNode(node.right);
+                for (int i = 0; i < corridorThickness; i++)
+                {
+                    map.SpawnTile(new Vector2Int((int) leftCenter.x + i, (int) leftCenter.y), corridor);
+                }
             }
+                
+            leftCenter.x += direction.x;
+            leftCenter.y += direction.y;
+        }
+            
+        if (node.left != null)
+        {
+            GenerateCorridorsNode(node.left);
+        }
+
+        if (node.right != null)
+        {
+            GenerateCorridorsNode(node.right);
         }
     }
 
@@ -199,7 +165,7 @@ public class Generator : MonoBehaviour
         return mmTile; // default case
     }
 
-    private void PaintTiles()
+    public void PaintTiles()
     {
         for (int i = 0; i < dungeonSize.x; i++) {
             for (int j = 0; j < dungeonSize.y; j++) {
@@ -209,6 +175,32 @@ public class Generator : MonoBehaviour
                 }
             }
         }
+    }
+
+    public IEnumerator GenerateDistFromStartMap()
+    {
+        tree.ChooseStartAndEndNode();
+        
+        distFromStartMap = new DijkstraMap();
+        distFromStartMap.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
+            , map.TileMap);
+        
+        while (!distFromStartMap.IsFinished)
+        {
+            distFromStartMap.Update();
+            distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
+            yield return null;
+        }
+    }
+
+    public IEnumerator DrawHotPath()
+    {
+        shortestRouteFinder.Initialize(distFromStartMap);
+        shortestRouteFinder.PlotPathToStartOfMap(new Vector2Int((int)tree.EndRoom.container.center.x, (int)tree.EndRoom.container.center.y));
+        shortestRouteFinder.AddPathToTexture(ref startMapTexture);
+        MarkHotPathRooms(shortestRouteFinder.route);
+        DoHotPathColour();
+        yield return null;
     }
 
     private void MarkHotPathRooms(List<Vector2Int> route)

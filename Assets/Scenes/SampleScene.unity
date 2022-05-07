@@ -777,8 +777,9 @@ GameObject:
   - component: {fileID: 998241708}
   - component: {fileID: 998241707}
   - component: {fileID: 998241709}
+  - component: {fileID: 998241710}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -875,6 +876,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasParent: {fileID: 123183325}
   itemPrefab: {fileID: 6155514642928731136, guid: b543832af3b734b4eb0f6e0d578243fd, type: 3}
+--- !u!114 &998241710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998241706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95872ec2d8b049eaabae83e2e066178d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generator: {fileID: 998241707}
 --- !u!1 &1052899797
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,7 +1163,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2023019956
 Transform:
   m_ObjectHideFlags: 0
