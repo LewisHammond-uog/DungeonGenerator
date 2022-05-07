@@ -36,6 +36,6 @@ public class Controller : MonoBehaviour
 
         yield return generator.GenerateDistFromStartMap();
 
-        yield return generator.DrawHotPath(hotPathDelay);
+        yield return generator.GenerateAndDrawHotPath(hotPathDelay);
     }
 }

@@ -54,12 +54,18 @@ public class Generator : MonoBehaviour
         shortestRouteFinder = new Pathfinder();
     }
 
+    /// <summary>
+    /// Generate the space for the rooms to go in
+    /// </summary>
     public void GenerateSpace()
     {
         tree = new BSPTree(numberOfItterations, dungeonSize, minRoomSize);
         GenerateRooms();
     }
 
+    /// <summary>
+    /// Generate the rooms in the tree space
+    /// </summary>
     private void GenerateRooms()
     {
         List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
@@ -73,6 +79,12 @@ public class Generator : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Generate corridors for the entire tree
+    /// </summary>
+    /// <param name="delayPerCorridor"></param>
+    /// <param name="delayPerTile"></param>
+    /// <returns></returns>
     public IEnumerator GenerateCorridors(float delayPerCorridor, float delayPerTile)
     {
         if (tree == null || tree.RootNode == null)
@@ -86,6 +98,13 @@ public class Generator : MonoBehaviour
         yield return GenerateCorridorsNode(tree.RootNode, corridorDelay, tileDelay);
     }
 
+    /// <summary>
+    /// Generate Corridors between 2 nodes
+    /// </summary>
+    /// <param name="node"></param>
+    /// <param name="delayPerCorridor"></param>
+    /// <param name="delayPerTile"></param>
+    /// <returns></returns>
     private IEnumerator GenerateCorridorsNode(BSPTreeNode node, WaitForSeconds delayPerCorridor, WaitForSeconds delayPerTile)
     {
         if (!node.IsInternal)
@@ -176,6 +195,9 @@ public class Generator : MonoBehaviour
         return mmTile; // default case
     }
 
+    /// <summary>
+    /// Paint tiles of the map to be correct 
+    /// </summary>
     public void PaintTiles()
     {
         for (int i = 0; i < dungeonSize.x; i++) {
@@ -188,6 +210,10 @@ public class Generator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generate a Dijkstra Map from the start of the level 
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator GenerateDistFromStartMap()
     {
         tree.ChooseStartAndEndNode();
@@ -204,7 +230,12 @@ public class Generator : MonoBehaviour
         }
     }
 
-    public IEnumerator DrawHotPath(float delayPerCube)
+    /// <summary>
+    /// Generate and draw the hot path from the end to start of the level
+    /// </summary>
+    /// <param name="delayPerCube"></param>
+    /// <returns></returns>
+    public IEnumerator GenerateAndDrawHotPath(float delayPerCube)
     {
         Vector2Int destination =
             new Vector2Int((int) tree.EndRoom.container.center.x, (int) tree.EndRoom.container.center.y);
@@ -221,6 +252,10 @@ public class Generator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Mark rooms that are on the hot path
+    /// </summary>
+    /// <param name="route"></param>
     private void MarkHotPathRooms(List<Vector2Int> route)
     {
         List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
@@ -231,6 +266,9 @@ public class Generator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Colour rooms that are on the hot path
+    /// </summary>
     private void DoHotPathColour()
     {
         List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
