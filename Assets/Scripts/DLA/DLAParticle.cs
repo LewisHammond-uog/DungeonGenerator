@@ -13,6 +13,8 @@ public class DLAParticle : MonoBehaviour
     private GameObject spawnTile;
 
     private const string WallTag = "Wall";
+
+    public ParticleSpawner spawner;
     
     private void Start()
     {
@@ -20,6 +22,8 @@ public class DLAParticle : MonoBehaviour
         float y = Random.Range(-1f, 1f);
         direction = new Vector3(x, 0, y);
         direction.Normalize();
+        
+        Destroy(gameObject, 30);
     }
 
     private void Update()
@@ -46,5 +50,10 @@ public class DLAParticle : MonoBehaviour
             FindObjectOfType<Generator>().TileMap.DeleteTile(Vector2Int.RoundToInt(pos));
             Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        spawner.RemoveParticleFromList(this);
     }
 }

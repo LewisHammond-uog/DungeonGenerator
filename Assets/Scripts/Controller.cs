@@ -13,12 +13,16 @@ public class Controller : MonoBehaviour
     [SerializeField] private float delayPerCorridorTile = 0.01f;
     [SerializeField] private float delayPerCorridor = 0.1f;
 
+    [Header("DLA")] 
+    [SerializeField] private ParticleSpawner dlaSpawner;
+    
     [Header("Hot Path")] 
+    [SerializeField] private GameObject hotPathTex;
     [SerializeField] private float startMapDelay = 0.001f;
     [SerializeField] private float hotPathDelay = 0.05f;
     
-    
-    private void Awake()
+
+    private void Start()
     {
         StartCoroutine(DoSequence());
     }
@@ -40,10 +44,16 @@ public class Controller : MonoBehaviour
         
         yield return generator.GenerateCorridors(delayPerCorridor, delayPerCorridorTile);
         yield return new WaitForSeconds(delay);
+        generator.PaintTiles();
+        
+        //Erode Rooms with DLA
+        dlaSpawner.SpawnParticles();
+        yield return dlaSpawner.WaitForAllParticlesDead();
         
         generator.PaintTiles();
         yield return new WaitForSeconds(delay);
 
+        hotPathTex.SetActive(true);
         yield return generator.GenerateDistFromStartMap(startMapDelay);
 
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);

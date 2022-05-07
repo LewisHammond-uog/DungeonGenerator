@@ -890,6 +890,8 @@ MonoBehaviour:
   spaceDrawDelay: 0.5
   delayPerCorridorTile: 0.001
   delayPerCorridor: 0.01
+  dlaSpawner: {fileID: 2023019957}
+  hotPathTex: {fileID: 317770547}
   startMapDelay: 0
   hotPathDelay: 0.05
 --- !u!1 &1052899797
@@ -1166,7 +1168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2023019956
 Transform:
   m_ObjectHideFlags: 0
