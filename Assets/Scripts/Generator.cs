@@ -214,19 +214,25 @@ public class Generator : MonoBehaviour
     /// Generate a Dijkstra Map from the start of the level 
     /// </summary>
     /// <returns></returns>
-    public IEnumerator GenerateDistFromStartMap()
+    public IEnumerator GenerateDistFromStartMap(float delayTime)
     {
         tree.ChooseStartAndEndNode();
         
         distFromStartMap = new DijkstraMap();
         distFromStartMap.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
             , map.TileMap);
+
+        WaitForSeconds delay = new WaitForSeconds(delayTime);
         
         while (!distFromStartMap.IsFinished)
         {
-            distFromStartMap.Update();
+            const int updatesPerFrame = 6;
+            for (int i = 0; i < updatesPerFrame; ++i)
+            {
+                distFromStartMap.Update();
+            }
             distFromStartMap.GetMapAsTexture(ref startMapTexture, distGradient);
-            yield return null;
+            yield return delay;
         }
     }
 

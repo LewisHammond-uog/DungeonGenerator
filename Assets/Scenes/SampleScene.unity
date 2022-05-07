@@ -280,8 +280,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -801,14 +801,12 @@ MonoBehaviour:
   corridorThickness: 3
   dungeonSize: {x: 200, y: 200}
   minRoomSize: {x: 7, y: 7}
-  debugTile: {fileID: 451882589754301966, guid: 059041b8fed61a0489dd63f37812a1b1, type: 3}
   rooms:
   - roomPrefab: {fileID: 3805796202354055709, guid: b460f0cea5fb590449cc2f46043f5945, type: 3}
     size: {x: 7, y: 7}
   - roomPrefab: {fileID: 3805796202354055709, guid: 59d0ce00278b6624f85156e06066f2ca, type: 3}
     size: {x: 12, y: 12}
   corridor: {fileID: 451882589754301966, guid: b4eb1af984c3be742b7eeeff4c58efdb, type: 3}
-  spawnedRooms: []
   tlTile: {fileID: 4800298893490477974, guid: a20022a7111627a40aad106ad3835b0e, type: 3}
   tmTile: {fileID: 4800298893490477974, guid: 01304611eb1fbbc4a9b536ef9b78bc0d, type: 3}
   trTile: {fileID: 4800298893490477974, guid: d73d85669646bb540a79d8b1b4f7d755, type: 3}
@@ -889,6 +887,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 998241707}
+  delayPerCorridorTile: 0.001
+  delayPerCorridor: 0.001
+  startMapDelay: 0
+  hotPathDelay: 0.05
 --- !u!1 &1052899797
 GameObject:
   m_ObjectHideFlags: 0

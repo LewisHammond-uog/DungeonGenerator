@@ -11,6 +11,7 @@ public class Controller : MonoBehaviour
     [SerializeField] private float delayPerCorridor = 0.1f;
 
     [Header("Hot Path")] 
+    [SerializeField] private float startMapDelay = 0.001f;
     [SerializeField] private float hotPathDelay = 0.05f;
     
     
@@ -34,7 +35,7 @@ public class Controller : MonoBehaviour
         generator.PaintTiles();
         yield return new WaitForSeconds(delay);
 
-        yield return generator.GenerateDistFromStartMap();
+        yield return generator.GenerateDistFromStartMap(startMapDelay);
 
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);
     }
