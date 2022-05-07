@@ -316,7 +316,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &317770548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,8 +887,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 998241707}
+  spaceDrawDelay: 0.5
   delayPerCorridorTile: 0.001
-  delayPerCorridor: 0.001
+  delayPerCorridor: 0.01
   startMapDelay: 0
   hotPathDelay: 0.05
 --- !u!1 &1052899797

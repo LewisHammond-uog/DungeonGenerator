@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Generator : MonoBehaviour
 {
-    private BSPTree tree;
+    public BSPTree tree;
 
     [SerializeField] private int numberOfItterations = 10;
     [SerializeField] private int corridorThickness = 2;
@@ -60,13 +60,13 @@ public class Generator : MonoBehaviour
     public void GenerateSpace()
     {
         tree = new BSPTree(numberOfItterations, dungeonSize, minRoomSize);
-        GenerateRooms();
+        
     }
 
     /// <summary>
     /// Generate the rooms in the tree space
     /// </summary>
-    private void GenerateRooms()
+    public void GenerateRooms()
     {
         List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
         tree.GetLeafNodes(ref leafNodes);
@@ -305,43 +305,4 @@ public class Generator : MonoBehaviour
         }
         startMapTexture.Apply();
     }
-
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos ()
-    {
-        DebugDrawBsp();
-    }
-
-    private void DebugDrawBsp () {
-        if (tree == null) return; // hasn't been generated yet
-        if (tree.RootNode == null) return; // hasn't been generated yet
-
-        List<BSPTreeNode> leafNodes = new List<BSPTreeNode>();
-        tree.GetLeafNodes(ref leafNodes);
-
-        foreach (BSPTreeNode node in leafNodes)
-        {
-            DebugDrawBspNode (node); 
-        }
-    }
-
-    private void DebugDrawBspNode (BSPTreeNode node) {
-        // Container
-        Gizmos.color = Color.green;
-        // top
-        Gizmos.DrawLine (new Vector3 (node.container.x, 0, node.container.y), new Vector3Int (node.container.xMax, 0, node.container.y));
-        // right
-        Gizmos.DrawLine (new Vector3 (node.container.xMax, 0, node.container.y), new Vector3Int (node.container.xMax, 0, node.container.yMax));
-        // bottom
-        Gizmos.DrawLine (new Vector3 (node.container.x, 0, node.container.yMax), new Vector3Int (node.container.xMax, 0, node.container.yMax));
-        // left
-        Gizmos.DrawLine (new Vector3 (node.container.x, 0, node.container.y), new Vector3Int (node.container.x, 0, node.container.yMax));
-
-        // children
-        if (node.left != null) DebugDrawBspNode (node.left);
-        if (node.right != null) DebugDrawBspNode (node.right);
-    }
-#endif
-    
 }
