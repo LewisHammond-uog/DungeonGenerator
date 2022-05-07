@@ -73,19 +73,24 @@ public class Generator : MonoBehaviour
         
     }
 
-    public void GenerateCorridors()
+    public IEnumerator GenerateCorridors(float delayPerCorridor, float delayPerTile)
     {
-        if (tree != null && tree.RootNode != null)
+        if (tree == null || tree.RootNode == null)
         {
-           GenerateCorridorsNode(tree.RootNode);
+            yield break;
         }
+        
+        //Optimization create the delays once, not every frame
+        WaitForSeconds corridorDelay = new WaitForSeconds(delayPerCorridor);
+        WaitForSeconds tileDelay = new WaitForSeconds(delayPerTile);
+        yield return GenerateCorridorsNode(tree.RootNode, corridorDelay, tileDelay);
     }
 
-    private void GenerateCorridorsNode(BSPTreeNode node)
+    private IEnumerator GenerateCorridorsNode(BSPTreeNode node, WaitForSeconds delayPerCorridor, WaitForSeconds delayPerTile)
     {
         if (!node.IsInternal)
         {
-            return;
+            yield break;
         }
         
         RectInt leftContainer = node.left.container;
@@ -94,7 +99,7 @@ public class Generator : MonoBehaviour
         Vector2 leftCenter = leftContainer.center;
         Vector2 rightCenter = rightContainer.center;
         Vector2 direction = (rightCenter - leftCenter).normalized;
-            
+
         while (Vector2.Distance(leftCenter, rightCenter) > 0.51f)
         {
             if (direction.Equals(Vector2.right))
@@ -103,6 +108,8 @@ public class Generator : MonoBehaviour
                 {
                     map.SpawnTile(new Vector2Int((int) leftCenter.x, (int) leftCenter.y + i), corridor);
                 }
+                
+                yield return delayPerTile;
 
             }else if (direction.Equals(Vector2.up))
             {
@@ -110,20 +117,24 @@ public class Generator : MonoBehaviour
                 {
                     map.SpawnTile(new Vector2Int((int) leftCenter.x + i, (int) leftCenter.y), corridor);
                 }
+                
+                yield return delayPerTile;
             }
                 
             leftCenter.x += direction.x;
             leftCenter.y += direction.y;
         }
-            
+
         if (node.left != null)
         {
-            GenerateCorridorsNode(node.left);
+            yield return GenerateCorridorsNode(node.left, delayPerCorridor, delayPerTile);
+            yield return delayPerCorridor;
         }
 
         if (node.right != null)
         {
-            GenerateCorridorsNode(node.right);
+            yield return GenerateCorridorsNode(node.right, delayPerCorridor, delayPerTile);
+            yield return delayPerCorridor;
         }
     }
 
@@ -193,14 +204,21 @@ public class Generator : MonoBehaviour
         }
     }
 
-    public IEnumerator DrawHotPath()
+    public IEnumerator DrawHotPath(float delayPerCube)
     {
-        shortestRouteFinder.Initialize(distFromStartMap);
-        shortestRouteFinder.PlotPathToStartOfMap(new Vector2Int((int)tree.EndRoom.container.center.x, (int)tree.EndRoom.container.center.y));
-        shortestRouteFinder.AddPathToTexture(ref startMapTexture);
-        MarkHotPathRooms(shortestRouteFinder.route);
-        DoHotPathColour();
-        yield return null;
+        Vector2Int destination =
+            new Vector2Int((int) tree.EndRoom.container.center.x, (int) tree.EndRoom.container.center.y);
+        
+        shortestRouteFinder.Initialize(distFromStartMap, destination);
+
+        while (!shortestRouteFinder.IsFinished)
+        {
+            shortestRouteFinder.Update();
+            shortestRouteFinder.AddPathToTexture(ref startMapTexture);
+            MarkHotPathRooms(shortestRouteFinder.route);
+            DoHotPathColour();
+            yield return new WaitForSeconds(delayPerCube);
+        }
     }
 
     private void MarkHotPathRooms(List<Vector2Int> route)

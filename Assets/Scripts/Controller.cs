@@ -6,6 +6,14 @@ public class Controller : MonoBehaviour
 {
     [SerializeField] private Generator generator;
 
+    [Header("Corridors")]
+    [SerializeField] private float delayPerCorridorTile = 0.01f;
+    [SerializeField] private float delayPerCorridor = 0.1f;
+
+    [Header("Hot Path")] 
+    [SerializeField] private float hotPathDelay = 0.05f;
+    
+    
     private void Awake()
     {
         StartCoroutine(DoSequence());
@@ -20,7 +28,7 @@ public class Controller : MonoBehaviour
         generator.GenerateSpace();
         yield return new WaitForSeconds(delay);
         
-        generator.GenerateCorridors();
+        yield return generator.GenerateCorridors(delayPerCorridor, delayPerCorridorTile);
         yield return new WaitForSeconds(delay);
         
         generator.PaintTiles();
@@ -28,6 +36,6 @@ public class Controller : MonoBehaviour
 
         yield return generator.GenerateDistFromStartMap();
 
-        yield return generator.DrawHotPath();
+        yield return generator.DrawHotPath(hotPathDelay);
     }
 }
