@@ -11,13 +11,12 @@ using Random = UnityEngine.Random;
 public class ParticleSpawner : MonoBehaviour
 {
      [SerializeField] private GameObject particlePrefab;
-     [Min(0)] [SerializeField] private int particlesToSpawn;
 
      private TileMap3D tilemap;
 
      private List<DLAParticle> particles;
 
-     public void SpawnParticles()
+     public void SpawnParticles(int particlesToSpawn)
      {
           particles = new List<DLAParticle>();
           tilemap = FindObjectOfType<Generator>().TileMap;

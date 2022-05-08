@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
 {
@@ -21,6 +22,15 @@ public class Controller : MonoBehaviour
     [SerializeField] private float startMapDelay = 0.001f;
     [SerializeField] private float hotPathDelay = 0.05f;
 
+    [Header("UI")] 
+    [SerializeField] private Slider boundsX;
+    [SerializeField] private Slider boundsY;
+    [SerializeField] private Slider minCellX;
+    [SerializeField] private Slider minCellY;
+    [SerializeField] private Slider bspItterations;
+    [SerializeField] private Toggle enableDLA;
+    [SerializeField] private Slider dlaParticleCount;
+
     public void StartSequence()
     {
         StartCoroutine(DoSequence());
@@ -30,7 +40,10 @@ public class Controller : MonoBehaviour
     {
         const float delay = 1f;
         
-        generator.Init();
+        Vector2Int roomSize = new Vector2Int((int)boundsX.value, (int)boundsY.value);
+        Vector2Int cellSize = new Vector2Int((int)minCellX.value, (int)minCellY.value);
+        
+        generator.Init(roomSize, cellSize, (int)bspItterations.value);
         
         generator.GenerateSpace();
         yield return new WaitForSeconds(delay);
@@ -46,10 +59,13 @@ public class Controller : MonoBehaviour
         generator.PaintTiles();
         
         //Erode Rooms with DLA
-        dlaSpawner.SpawnParticles();
-        yield return dlaSpawner.WaitForAllParticlesDead();
-        
-        generator.PaintTiles();
+        if (enableDLA.isOn)
+        {
+            dlaSpawner.SpawnParticles((int)dlaParticleCount.value);
+            yield return dlaSpawner.WaitForAllParticlesDead();
+            generator.PaintTiles();
+        }
+
         yield return new WaitForSeconds(delay);
 
         hotPathTex.SetActive(true);

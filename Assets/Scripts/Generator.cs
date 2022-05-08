@@ -11,7 +11,7 @@ public class Generator : MonoBehaviour
     [SerializeField] private int numberOfItterations = 10;
     [SerializeField] private int corridorThickness = 2;
 
-    [SerializeField] private Vector2Int dungeonSize;
+    private Vector2Int dungeonSize;
     [SerializeField] private Vector2Int minRoomSize;
 
     [SerializeField] private RoomInfo[] rooms;
@@ -39,8 +39,12 @@ public class Generator : MonoBehaviour
     [SerializeField] private Gradient distGradient;
     private Texture2D startMapTexture;
     
-    public void Init()
+    public void Init(Vector2Int dungeonBounds, Vector2Int minCellSize, int itterations)
     {
+        dungeonSize = dungeonBounds;
+        minRoomSize = minCellSize;
+        numberOfItterations = itterations;
+        
         map = gameObject.AddComponent<TileMap3D>();
         map.Init(dungeonSize);
         

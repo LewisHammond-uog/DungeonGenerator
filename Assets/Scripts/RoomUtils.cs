@@ -21,7 +21,9 @@ public class RoomUtils
         //Check we have some rooms
         if (underSizeRooms.Count == 0)
         {
-            return null;
+            //Return a random room if none
+            int roomIndex = Random.Range(0, rooms.Length);
+            return rooms[roomIndex].roomPrefab;
         }
 
         //Choose a random room to put in this slot
