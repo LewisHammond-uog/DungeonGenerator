@@ -20,9 +20,8 @@ public class Controller : MonoBehaviour
     [SerializeField] private GameObject hotPathTex;
     [SerializeField] private float startMapDelay = 0.001f;
     [SerializeField] private float hotPathDelay = 0.05f;
-    
 
-    private void Start()
+    public void StartSequence()
     {
         StartCoroutine(DoSequence());
     }
