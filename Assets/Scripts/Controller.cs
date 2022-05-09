@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,18 @@ public class Controller : MonoBehaviour
     [SerializeField] private Slider bspItterations;
     [SerializeField] private Toggle enableDLA;
     [SerializeField] private Slider dlaParticleCount;
+    
+    [SerializeField] private Button generateButton;
+    [SerializeField] private Button resetButton;
+    
+    //BSP
+    private List<LineRenderer> drawnRectangles;
+
+    private void Awake()
+    {
+        drawnRectangles = new List<LineRenderer>();
+        ToggleInputUI(true);
+    }
 
     public void StartSequence()
     {
@@ -39,7 +52,8 @@ public class Controller : MonoBehaviour
     private IEnumerator DoSequence()
     {
         const float delay = 1f;
-        
+
+        ToggleInputUI(false);
         Vector2Int roomSize = new Vector2Int((int)boundsX.value, (int)boundsY.value);
         Vector2Int cellSize = new Vector2Int((int)minCellX.value, (int)minCellY.value);
         
@@ -74,6 +88,40 @@ public class Controller : MonoBehaviour
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);
     }
 
+    public void ResetGeneration()
+    {
+        //Reset rectangles
+        foreach (LineRenderer rectangle in drawnRectangles)
+        {
+            Destroy(rectangle.gameObject);
+        }
+        
+        drawnRectangles.Clear();
+        generator.ResetGenerator();
+        generator.StopAllCoroutines();
+        StopAllCoroutines();
+        
+        dlaSpawner.ResetSpawner();
+        
+        hotPathTex.SetActive(false);
+        
+        ToggleInputUI(true);
+    }
+
+    private void ToggleInputUI(bool uiEnabled)
+    {
+        boundsX.interactable = uiEnabled;
+        boundsY.interactable = uiEnabled;
+        minCellX.interactable = uiEnabled;
+        minCellY.interactable = uiEnabled;
+        bspItterations.interactable = uiEnabled;
+        enableDLA.interactable = uiEnabled;
+        dlaParticleCount.interactable = uiEnabled;
+
+        generateButton.interactable = uiEnabled;
+        resetButton.interactable = !uiEnabled;
+    }
+
     private IEnumerator DrawSpaceAndTreeProgressive(BSPTreeNode node )
     {
         //Draw Nodes
@@ -98,5 +146,7 @@ public class Controller : MonoBehaviour
         lineRender.SetPosition(1, new Vector3 (node.container.xMax, 0, node.container.yMin));
         lineRender.SetPosition(2, new Vector3 (node.container.xMin, 0, node.container.yMin));
         lineRender.SetPosition(3, new Vector3 (node.container.xMin, 0, node.container.yMax));
+        
+        drawnRectangles.Add(lineRender);
     }
 }

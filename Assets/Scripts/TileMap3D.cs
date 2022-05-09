@@ -159,8 +159,22 @@ public class TileMap3D : MonoBehaviour
         return pos.x > 0 && pos.x < map.GetLength(xDimension) 
                          && pos.y > 0 && pos.y < map.GetLength(yDimension);
     }
-    
-    #if UNITY_EDITOR
+
+    private void OnDestroy()
+    {
+        //Clear the Map and delete all
+        for (int x = 0; x < mapSize.x; x++)
+        {
+            for (int y = 0; y < mapSize.y; y++)
+            {
+                Destroy(map[x, y]);
+            }
+        }
+
+        map = null;
+    }
+
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (drawDebugTiles)

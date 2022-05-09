@@ -26,6 +26,18 @@ public class ParticleSpawner : MonoBehaviour
           }
      }
 
+     public void ResetSpawner()
+     {
+          //Destroy all particles
+          if (particles != null)
+          {
+               foreach (DLAParticle particle in particles)
+               {
+                    Destroy(particle.gameObject);
+               }
+          }
+     }
+
      private void SpawnParticleAtRandomPos()
      {
           //Generate random position that is not a tile already in the tile map

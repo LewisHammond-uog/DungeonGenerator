@@ -35,7 +35,7 @@ public class Generator : MonoBehaviour
     private DijkstraMap distFromStartMap;
     private Pathfinder shortestRouteFinder;
 
-    [SerializeField] private Image testImage;
+    [SerializeField] private Image dMapImage;
     [SerializeField] private Gradient distGradient;
     private Texture2D startMapTexture;
     
@@ -51,11 +51,19 @@ public class Generator : MonoBehaviour
         //Sprite for dist from start map
         startMapTexture = new Texture2D(dungeonSize.x, dungeonSize.y);
         Sprite distanceMapSprite = Sprite.Create(startMapTexture, new Rect(0,0,dungeonSize.x,dungeonSize.y), new Vector2(0,0));
-        testImage.sprite = distanceMapSprite;
-        testImage.rectTransform.sizeDelta = dungeonSize;
-        testImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
+        dMapImage.sprite = distanceMapSprite;
+        dMapImage.rectTransform.sizeDelta = dungeonSize;
+        dMapImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
         
         shortestRouteFinder = new Pathfinder();
+    }
+
+    public void ResetGenerator()
+    {
+        tree = null;
+        Destroy(map);
+        Destroy(startMapTexture);
+        shortestRouteFinder = null;
     }
 
     /// <summary>
@@ -64,7 +72,6 @@ public class Generator : MonoBehaviour
     public void GenerateSpace()
     {
         tree = new BSPTree(numberOfItterations, dungeonSize, minRoomSize);
-        
     }
 
     /// <summary>
