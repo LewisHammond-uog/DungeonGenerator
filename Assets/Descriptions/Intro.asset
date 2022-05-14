@@ -13,4 +13,10 @@ MonoBehaviour:
   m_Name: Intro
   m_EditorClassIdentifier: 
   title: Intro
-  description: TBC
+  description: 'Welcome to the dungeon generator!
+
+
+    Set the dungeon generator
+    options on the panel on the left hand side.
+
+'

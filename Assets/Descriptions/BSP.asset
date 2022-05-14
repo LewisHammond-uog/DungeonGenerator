@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: BSP
   m_EditorClassIdentifier: 
   title: Binary Space Partitoning
-  description: 'The dungeon uses Binary Space Partitioning (BSP) to divide the space
+  description: "The dungeon uses Binary Space Partitioning (BSP) to divide the space
     into a set of rectangular cells, such that any one point can only be within one
-    cell (Shaker et al., 2016). The method works by dividing the space in to 2 subsets
-    recursively. Prefab rooms are inserted in the centre to the cells to form the
-    rooms of the dungeon. '
+    cell. \n\nThe method works by dividing the space in to 2 subsets recursively.
+    Prefab rooms are inserted in the centre to the cells to form the rooms of the
+    dungeon. \n\nEach <color=#FF00FF>magenta</color> square represents a cell with
+    in the space"

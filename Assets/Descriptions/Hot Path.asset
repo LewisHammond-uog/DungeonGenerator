@@ -16,4 +16,6 @@ MonoBehaviour:
   description: "Additionally, the map is used to generate the shortest path between
     the start and end of the level, any rooms that are on this \u2018hot path\u2019
     can then be marked as \u2018hot rooms\u2019 and then special features of these
-    rooms can be implemented, such as story content or different enemy spawning. "
+    rooms can be implemented, such as story content or different enemy spawning.
+    \n\nThe shortest path is drawn in <color=blue>blue</color>. Any rooms that are
+    on the shortest path, 'hot rooms', are coloured <color=#FF00FF>magenta</color>."

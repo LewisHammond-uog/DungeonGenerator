@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Dykstra Maps
   m_EditorClassIdentifier: 
   title: Dykstra Maps
-  description: "Finally, as described by Wolverson (2020), Dykstra Maps are the processes
-    of creating a map of distances between locations in a level based on Dijkstra\u2019s
-    (1959) pathfinding algorithm. \r\n\r\nDykstra Maps have a variety of uses within
-    dungeon generation. In this project they are used to generate a map, shown by
-    an image, that calculates the distance from the start point of the level. This
-    could be used to influence the placing for spawners or enemies. \r\n"
+  description: "Dykstra Maps is  the process of creating a map of distances between
+    locations in a level based on Dijkstra\u2019s  pathfinding algorithm. \r\n\r\nDykstra
+    Maps have a variety of uses within dungeon generation. In this project they are
+    used to generate a map, shown by an image, that calculates the distance from
+    the start point of the level. This could be used to influence the placing for
+    spawners or enemies. \n\nHere, \rthe more <color=red>Red</color> the map, the
+    closer it is to the start of the level, fading to <color=yellow>Yellow</color>
+    the further away from the start of the level.\n"
