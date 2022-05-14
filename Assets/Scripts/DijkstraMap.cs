@@ -115,7 +115,7 @@ public class DijkstraMap
     /// </summary>
     /// <param name="gradient">Gradient to use as a texture</param>
     /// <returns></returns>
-    public void GetMapAsTexture(ref Texture2D tex, Gradient gradient)
+    public void GetMapAsTexture(ref ProtectedTexture2D tex, Gradient gradient)
     {
         if (tex == null)
         {
@@ -129,12 +129,6 @@ public class DijkstraMap
                 
                 float distance = distances[x, y];
 
-                if (distance == 0f)
-                {
-                    tex.SetPixel(x,y,new Color(0,1,0,1));
-                    continue;
-                }
-                
                 if (float.IsPositiveInfinity(distance))
                 {
                     tex.SetPixel(x,y, new Color(0,0,0,0));
@@ -147,7 +141,6 @@ public class DijkstraMap
             }
         }
         tex.Apply();
-        tex.filterMode = FilterMode.Point;
     }
 
     /// <summary>

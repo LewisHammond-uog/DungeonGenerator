@@ -98,12 +98,17 @@ public class Controller : MonoBehaviour
 
         hotPathTex.SetActive(true);
         UpdateDescriptionSafe(4);
+
+        generator.DrawStartAndEndPointToTex();
         yield return generator.GenerateDistFromStartMap(startMapDelay);
 
         UpdateDescriptionSafe(5);
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);
 
+        yield return new WaitForSeconds(5f);
+
         StartCoroutine(RotateCamForever());
+        UpdateDescriptionSafe(6);
     }
 
     public void ResetGeneration()

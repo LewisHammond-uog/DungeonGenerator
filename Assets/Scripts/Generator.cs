@@ -37,7 +37,7 @@ public class Generator : MonoBehaviour
 
     [SerializeField] private Image dMapImage;
     [SerializeField] private Gradient distGradient;
-    private Texture2D startMapTexture;
+    private ProtectedTexture2D startMapTexture;
     
     public void Init(Vector2Int dungeonBounds, Vector2Int minCellSize, int itterations)
     {
@@ -49,8 +49,8 @@ public class Generator : MonoBehaviour
         map.Init(dungeonSize);
         
         //Sprite for dist from start map
-        startMapTexture = new Texture2D(dungeonSize.x, dungeonSize.y);
-        Sprite distanceMapSprite = Sprite.Create(startMapTexture, new Rect(0,0,dungeonSize.x,dungeonSize.y), new Vector2(0,0));
+        startMapTexture = new ProtectedTexture2D(dungeonSize.x, dungeonSize.y);
+        Sprite distanceMapSprite = Sprite.Create(startMapTexture.texture, new Rect(0,0,dungeonSize.x,dungeonSize.y), new Vector2(0,0));
         dMapImage.sprite = distanceMapSprite;
         dMapImage.rectTransform.sizeDelta = dungeonSize;
         dMapImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
@@ -62,7 +62,7 @@ public class Generator : MonoBehaviour
     {
         tree = null;
         Destroy(map);
-        Destroy(startMapTexture);
+        startMapTexture = null;
         shortestRouteFinder = null;
     }
 
@@ -222,13 +222,31 @@ public class Generator : MonoBehaviour
     }
 
     /// <summary>
+    /// Draw the start and end point of the map to the texture
+    /// </summary>
+    public void DrawStartAndEndPointToTex()
+    {
+        tree.ChooseStartAndEndNode();
+        
+        Vector2Int start =
+            new Vector2Int((int) tree.StartRoom.container.center.x, (int) tree.StartRoom.container.center.y);
+        
+        startMapTexture.SetPixel(start.x, start.y, Color.green);
+        startMapTexture.ProtectPixel(start);
+        
+        Vector2Int destination =
+            new Vector2Int((int) tree.EndRoom.container.center.x, (int) tree.EndRoom.container.center.y);
+        
+        startMapTexture.SetPixel(destination.x, destination.y, Color.red);
+        startMapTexture.ProtectPixel(destination);
+    }
+
+    /// <summary>
     /// Generate a Dijkstra Map from the start of the level 
     /// </summary>
     /// <returns></returns>
     public IEnumerator GenerateDistFromStartMap(float delayTime)
     {
-        tree.ChooseStartAndEndNode();
-        
         distFromStartMap = new DijkstraMap();
         distFromStartMap.Initialize(new Vector2Int((int)tree.StartRoom.container.center.x, (int)tree.StartRoom.container.center.y)
             , map.TileMap);

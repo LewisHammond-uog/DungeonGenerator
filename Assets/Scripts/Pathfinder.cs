@@ -71,7 +71,7 @@ public class Pathfinder
         }
     }
 
-    public void AddPathToTexture(ref Texture2D tex)
+    public void AddPathToTexture(ref ProtectedTexture2D tex)
     {
         foreach (Vector2Int point in route)
         {
