@@ -18,6 +18,6 @@ MonoBehaviour:
     can then be marked as \u2018hot rooms\u2019 and then special features of these
     rooms can be implemented, such as story content or different enemy spawning.
     \n\nThe shortest path is drawn in <color=blue>blue</color>. Any rooms that are
-    on the shortest path, 'hot rooms', are coloured <color=#FF00FF>magenta</color>.\n\nThe
+    on the shortest path, 'hot rooms', are coloured <color=blue>blue</color>.\n\nThe
     start of the level is marked by a <color=green>green</color> square, the end
     of the level by a <color=red>red</color> square."

@@ -167,7 +167,10 @@ public class TileMap3D : MonoBehaviour
         {
             for (int y = 0; y < mapSize.y; y++)
             {
-                Destroy(map[x, y]);
+                if (map != null && map[x, y])
+                {
+                    Destroy(map[x, y]);
+                }
             }
         }
 

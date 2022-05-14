@@ -325,7 +325,7 @@ public class Generator : MonoBehaviour
 
                         if (map.TileMap[mainMapPos.x, mainMapPos.y] != null)
                         {
-                            startMapTexture.SetPixel(mainMapPos.x, mainMapPos.y, Color.magenta);
+                            startMapTexture.SetPixel(mainMapPos.x, mainMapPos.y, Color.blue);
                         }
                         
                     }
