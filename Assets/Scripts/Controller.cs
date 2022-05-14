@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +35,11 @@ public class Controller : MonoBehaviour
     
     [SerializeField] private Button generateButton;
     [SerializeField] private Button resetButton;
+
+    [Header("Text Display")] 
+    [SerializeField] private TMP_Text titleField;
+    [SerializeField] private TMP_Text descriptionField;
+    [SerializeField] private Description[] descriptions;
     
     //BSP
     private List<LineRenderer> drawnRectangles;
@@ -42,6 +48,7 @@ public class Controller : MonoBehaviour
     {
         drawnRectangles = new List<LineRenderer>();
         ToggleInputUI(true);
+        UpdateDescriptionSafe(0);
     }
 
     public void StartSequence()
@@ -59,6 +66,7 @@ public class Controller : MonoBehaviour
         
         generator.Init(roomSize, cellSize, (int)bspItterations.value);
         
+        UpdateDescriptionSafe(1);
         generator.GenerateSpace();
         yield return new WaitForSeconds(delay);
 
@@ -68,6 +76,7 @@ public class Controller : MonoBehaviour
         generator.GenerateRooms();
         yield return new WaitForSeconds(delay);
         
+        UpdateDescriptionSafe(2);
         yield return generator.GenerateCorridors(delayPerCorridor, delayPerCorridorTile);
         yield return new WaitForSeconds(delay);
         generator.PaintTiles();
@@ -75,6 +84,7 @@ public class Controller : MonoBehaviour
         //Erode Rooms with DLA
         if (enableDLA.isOn)
         {
+            UpdateDescriptionSafe(3);
             dlaSpawner.SpawnParticles((int)dlaParticleCount.value);
             yield return dlaSpawner.WaitForAllParticlesDead();
             generator.PaintTiles();
@@ -83,8 +93,10 @@ public class Controller : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         hotPathTex.SetActive(true);
+        UpdateDescriptionSafe(4);
         yield return generator.GenerateDistFromStartMap(startMapDelay);
 
+        UpdateDescriptionSafe(5);
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);
     }
 
@@ -106,6 +118,7 @@ public class Controller : MonoBehaviour
         hotPathTex.SetActive(false);
         
         ToggleInputUI(true);
+        UpdateDescriptionSafe(0);
     }
 
     private void ToggleInputUI(bool uiEnabled)
@@ -148,5 +161,19 @@ public class Controller : MonoBehaviour
         lineRender.SetPosition(3, new Vector3 (node.container.xMin, 0, node.container.yMax));
         
         drawnRectangles.Add(lineRender);
+    }
+
+    private void UpdateDescriptionSafe(int index)
+    {
+        //Check we have valid description
+        if (descriptions == null || index < 0 || index >= descriptions.Length)
+        {
+            return;
+        }
+
+        Description description = descriptions[index];
+
+        titleField.text = description.title;
+        descriptionField.text = description.description;
     }
 }

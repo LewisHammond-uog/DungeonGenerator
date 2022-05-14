@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449e634b35a127b44a5ffe21c03c3e53, type: 3}
+  m_Name: BSP Corridors
+  m_EditorClassIdentifier: 
+  title: BSP Corridors
+  description: 'Corridors are generated from the BSP Graph. From the top to the bottom
+    of the graph, nodes are connected to their neighbour on the same level, in the
+    centre of the cell. This is repeated until all cells are connected. '
