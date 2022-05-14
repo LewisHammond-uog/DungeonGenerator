@@ -41,6 +41,10 @@ public class Controller : MonoBehaviour
     [SerializeField] private TMP_Text descriptionField;
     [SerializeField] private Description[] descriptions;
     
+    [Header("Camera")]
+    [SerializeField] private Transform camDefaultPos;
+    [SerializeField] private Transform camRotatePos;
+    
     //BSP
     private List<LineRenderer> drawnRectangles;
 
@@ -98,6 +102,8 @@ public class Controller : MonoBehaviour
 
         UpdateDescriptionSafe(5);
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);
+
+        StartCoroutine(RotateCamForever());
     }
 
     public void ResetGeneration()
@@ -116,6 +122,8 @@ public class Controller : MonoBehaviour
         dlaSpawner.ResetSpawner();
         
         hotPathTex.SetActive(false);
+        
+        ResetCamera();
         
         ToggleInputUI(true);
         UpdateDescriptionSafe(0);
@@ -175,5 +183,36 @@ public class Controller : MonoBehaviour
 
         titleField.text = description.title;
         descriptionField.text = description.description;
+    }
+    
+    private void ResetCamera()
+    {
+        if (!Camera.main)
+        {
+            return;
+        }
+
+        Camera.main.transform.position = camDefaultPos.position;
+        Camera.main.transform.rotation = camDefaultPos.rotation;
+    }
+
+    private IEnumerator RotateCamForever()
+    {
+        if (!Camera.main)
+        {
+            yield break;
+        }
+
+        const float rotateSpeed = 10f;
+        Camera.main.transform.position = camRotatePos.position;
+
+        while (true)
+        {
+            Camera.main.gameObject.transform.LookAt(new Vector3(100,0,100));
+            Camera.main.gameObject.transform.Translate(Vector3.right * rotateSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
     }
 }
