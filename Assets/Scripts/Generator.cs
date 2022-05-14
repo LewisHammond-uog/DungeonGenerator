@@ -130,7 +130,7 @@ public class Generator : MonoBehaviour
         Vector2 rightCenter = rightContainer.center;
         Vector2 direction = (rightCenter - leftCenter).normalized;
 
-        while (Vector2.Distance(leftCenter, rightCenter) > 0.51f)
+        while (Vector2.Distance(leftCenter, rightCenter) > 0.5f)
         {
             if (direction.Equals(Vector2.right))
             {
