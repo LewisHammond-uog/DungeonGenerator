@@ -44,6 +44,9 @@ public class Controller : MonoBehaviour
     [Header("Camera")]
     [SerializeField] private Transform camDefaultPos;
     [SerializeField] private Transform camRotatePos;
+
+    [Header("Advance Button")] 
+    [SerializeField] private Button advanceButton;
     
     //BSP
     private List<LineRenderer> drawnRectangles;
@@ -69,21 +72,19 @@ public class Controller : MonoBehaviour
         Vector2Int cellSize = new Vector2Int((int)minCellX.value, (int)minCellY.value);
         
         generator.Init(roomSize, cellSize, (int)bspItterations.value);
-        
+
         UpdateDescriptionSafe(1);
         generator.GenerateSpace();
-        yield return new WaitForSeconds(delay);
-
+        
         yield return DrawSpaceAndTreeProgressive(generator.tree.RootNode);
-        yield return new WaitForSeconds(delay);
         
         generator.GenerateRooms();
-        yield return new WaitForSeconds(delay);
+        yield return new ActivateButtonAndWaitForPress(advanceButton);
         
         UpdateDescriptionSafe(2);
         yield return generator.GenerateCorridors(delayPerCorridor, delayPerCorridorTile);
-        yield return new WaitForSeconds(delay);
         generator.PaintTiles();
+        yield return new ActivateButtonAndWaitForPress(advanceButton);
         
         //Erode Rooms with DLA
         if (enableDLA.isOn)
@@ -92,9 +93,9 @@ public class Controller : MonoBehaviour
             dlaSpawner.SpawnParticles((int)dlaParticleCount.value);
             yield return dlaSpawner.WaitForAllParticlesDead();
             generator.PaintTiles();
+            yield return new ActivateButtonAndWaitForPress(advanceButton);
         }
-
-        yield return new WaitForSeconds(delay);
+        
 
         hotPathTex.SetActive(true);
         UpdateDescriptionSafe(4);
@@ -102,10 +103,12 @@ public class Controller : MonoBehaviour
         generator.DrawStartAndEndPointToTex();
         yield return generator.GenerateDistFromStartMap(startMapDelay);
 
+        yield return new ActivateButtonAndWaitForPress(advanceButton);
+        
         UpdateDescriptionSafe(5);
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);
 
-        yield return new WaitForSeconds(5f);
+        yield return new ActivateButtonAndWaitForPress(advanceButton);
 
         StartCoroutine(RotateCamForever());
         UpdateDescriptionSafe(6);
