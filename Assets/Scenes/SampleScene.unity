@@ -1774,14 +1774,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis
-    tortor tortor. Aenean dignissim pretium diam aliquam facilisis. Proin non justo
-    venenatis urna eleifend ullamcorper. Morbi iaculis eros a porta mattis. Curabitur
-    tempus ac diam eget auctor. Vivamus libero enim, tristique lacinia lectus sit
-    amet, aliquet dictum risus. Vivamus congue purus sit amet nisl condimentum sagittis.
-    Vestibulum mollis sapien ipsum. Suspendisse maximus vehicula viverra. Fusce tristique,
-    neque nec semper sodales, dolor lectus condimentum velit, non ornare dolor velit
-    non elit. Pellentesque sagittis porta vehicula.
+  m_text: Waiting for start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4045,6 +4038,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c0a335680b0a465459dfd803b9b7bac6, type: 2}
   - {fileID: 11400000, guid: 553b7f4ed58730341aafab651507c09e, type: 2}
   - {fileID: 11400000, guid: c986fb45e45ae6f48bfd358098eb3881, type: 2}
+  - {fileID: 11400000, guid: 205df1ebb1a747f449f1a63771f6435c, type: 2}
   camDefaultPos: {fileID: 1099469234}
   camRotatePos: {fileID: 1165698455}
   advanceButton: {fileID: 982403767}
