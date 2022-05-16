@@ -126,31 +126,33 @@ public class Generator : MonoBehaviour
         RectInt leftContainer = node.left.container;
         RectInt rightContainer = node.right.container;
             
-        Vector2 leftCenter = leftContainer.center;
-        Vector2 rightCenter = rightContainer.center;
-        Vector2 direction = (rightCenter - leftCenter).normalized;
+        Vector2Int leftCenter = Vector2Int.RoundToInt(leftContainer.center);
+        Vector2Int rightCenter = Vector2Int.RoundToInt(rightContainer.center);
+        Vector2Int direction = (rightCenter - leftCenter);
+        
+        //'Normalize' the vector to either be right or up based on higher value
+        direction = direction.x > direction.y ? Vector2Int.right : Vector2Int.up;
 
-        while (Vector2.Distance(leftCenter, rightCenter) > 0.5f)
+
+        while (Mathf.RoundToInt(Vector2.Distance(leftCenter, rightCenter)) > 0.5f)
         {
-            if (direction.Equals(Vector2.right))
+            if (direction.Equals(Vector2Int.right))
             {
                 for (int i = 0; i < corridorThickness; i++)
                 {
                     map.SpawnTile(new Vector2Int((int) leftCenter.x, (int) leftCenter.y + i), corridor);
                 }
-                
-                yield return delayPerTile;
 
-            }else if (direction.Equals(Vector2.up))
+            }else if (direction.Equals(Vector2Int.up))
             {
                 for (int i = 0; i < corridorThickness; i++)
                 {
                     map.SpawnTile(new Vector2Int((int) leftCenter.x + i, (int) leftCenter.y), corridor);
                 }
-                
-                yield return delayPerTile;
             }
                 
+            yield return delayPerTile;
+            
             leftCenter.x += direction.x;
             leftCenter.y += direction.y;
         }

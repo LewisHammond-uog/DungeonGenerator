@@ -47,6 +47,8 @@ public class Controller : MonoBehaviour
 
     [Header("Advance Button")] 
     [SerializeField] private Button advanceButton;
+
+    [SerializeField] private Toggle autoAdvance;
     
     //BSP
     private List<LineRenderer> drawnRectangles;
@@ -79,12 +81,12 @@ public class Controller : MonoBehaviour
         yield return DrawSpaceAndTreeProgressive(generator.tree.RootNode);
         
         generator.GenerateRooms();
-        yield return new ActivateButtonAndWaitForPress(advanceButton);
+        yield return WaitForAdvanceButtonPressIfNoAutoAdvance();
         
         UpdateDescriptionSafe(2);
         yield return generator.GenerateCorridors(delayPerCorridor, delayPerCorridorTile);
         generator.PaintTiles();
-        yield return new ActivateButtonAndWaitForPress(advanceButton);
+        yield return WaitForAdvanceButtonPressIfNoAutoAdvance();
         
         //Erode Rooms with DLA
         if (enableDLA.isOn)
@@ -93,7 +95,7 @@ public class Controller : MonoBehaviour
             dlaSpawner.SpawnParticles((int)dlaParticleCount.value);
             yield return dlaSpawner.WaitForAllParticlesDead();
             generator.PaintTiles();
-            yield return new ActivateButtonAndWaitForPress(advanceButton);
+            yield return WaitForAdvanceButtonPressIfNoAutoAdvance();
         }
         
 
@@ -103,12 +105,10 @@ public class Controller : MonoBehaviour
         generator.DrawStartAndEndPointToTex();
         yield return generator.GenerateDistFromStartMap(startMapDelay);
 
-        yield return new ActivateButtonAndWaitForPress(advanceButton);
+        yield return WaitForAdvanceButtonPressIfNoAutoAdvance();
         
         UpdateDescriptionSafe(5);
         yield return generator.GenerateAndDrawHotPath(hotPathDelay);
-
-        yield return new ActivateButtonAndWaitForPress(advanceButton);
 
         StartCoroutine(RotateCamForever());
         UpdateDescriptionSafe(6);
@@ -202,6 +202,16 @@ public class Controller : MonoBehaviour
 
         Camera.main.transform.position = camDefaultPos.position;
         Camera.main.transform.rotation = camDefaultPos.rotation;
+    }
+
+    private IEnumerator WaitForAdvanceButtonPressIfNoAutoAdvance()
+    {
+        if (autoAdvance && autoAdvance.isOn)
+        {
+            yield break;
+        }
+        
+        yield return new ActivateButtonAndWaitForPress(advanceButton);
     }
 
     private IEnumerator RotateCamForever()
