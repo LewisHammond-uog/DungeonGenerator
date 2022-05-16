@@ -142,6 +142,7 @@ public class Controller : MonoBehaviour
         boundsY.interactable = uiEnabled;
         minCellX.interactable = uiEnabled;
         minCellY.interactable = uiEnabled;
+        corridorThickness.interactable = uiEnabled;
         bspItterations.interactable = uiEnabled;
         enableDLA.interactable = uiEnabled;
         dlaParticleCount.interactable = uiEnabled;
