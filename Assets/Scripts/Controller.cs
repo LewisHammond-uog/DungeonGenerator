@@ -29,6 +29,7 @@ public class Controller : MonoBehaviour
     [SerializeField] private Slider boundsY;
     [SerializeField] private Slider minCellX;
     [SerializeField] private Slider minCellY;
+    [SerializeField] private Slider corridorThickness;
     [SerializeField] private Slider bspItterations;
     [SerializeField] private Toggle enableDLA;
     [SerializeField] private Slider dlaParticleCount;
@@ -67,13 +68,11 @@ public class Controller : MonoBehaviour
 
     private IEnumerator DoSequence()
     {
-        const float delay = 1f;
-
         ToggleInputUI(false);
         Vector2Int roomSize = new Vector2Int((int)boundsX.value, (int)boundsY.value);
         Vector2Int cellSize = new Vector2Int((int)minCellX.value, (int)minCellY.value);
         
-        generator.Init(roomSize, cellSize, (int)bspItterations.value);
+        generator.Init(roomSize, cellSize, (int)corridorThickness.value, (int)bspItterations.value);
 
         UpdateDescriptionSafe(1);
         generator.GenerateSpace();

@@ -8,15 +8,15 @@ public class Generator : MonoBehaviour
 {
     public BSPTree tree;
 
-    [SerializeField] private int numberOfItterations = 10;
-    [SerializeField] private int corridorThickness = 2;
+    private int numberOfItterations = 10;
+    private int corridorThickness = 2;
 
     private Vector2Int dungeonSize;
-    [SerializeField] private Vector2Int minRoomSize;
+    private Vector2Int minRoomSize;
 
     [SerializeField] private RoomInfo[] rooms;
-
     [SerializeField] private GameObject corridor;
+    private List<GameObject> spawnedRooms;
 
     #region Tiles
     [HideInInspector] public GameObject tlTile;
@@ -39,11 +39,12 @@ public class Generator : MonoBehaviour
     [SerializeField] private Gradient distGradient;
     private ProtectedTexture2D startMapTexture;
     
-    public void Init(Vector2Int dungeonBounds, Vector2Int minCellSize, int itterations)
+    public void Init(Vector2Int dungeonBounds, Vector2Int minCellSize, int corridorThickness, int itterations)
     {
         dungeonSize = dungeonBounds;
         minRoomSize = minCellSize;
         numberOfItterations = itterations;
+        this.corridorThickness = corridorThickness;
         
         map = gameObject.AddComponent<TileMap3D>();
         map.Init(dungeonSize);
@@ -56,6 +57,8 @@ public class Generator : MonoBehaviour
         dMapImage.transform.parent.position = new Vector3(dungeonSize.x / 2 - 0.5f, 1, dungeonSize.y / 2 - 4 + 0.5f);
         
         shortestRouteFinder = new Pathfinder();
+
+        spawnedRooms = new List<GameObject>();
     }
 
     public void ResetGenerator()
