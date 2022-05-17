@@ -4612,6 +4612,10 @@ MonoBehaviour:
   blTile: {fileID: 4800298893490477974, guid: 9e9cada966637ac42b7421fc983a6e47, type: 3}
   bmTile: {fileID: 4800298893490477974, guid: c24a98aa4b6318c4f881e77e5087742c, type: 3}
   brTile: {fileID: 4800298893490477974, guid: 19283a1624205c448b70df12318f60d6, type: 3}
+  tSoloTile: {fileID: 4800298893490477974, guid: 116edb5f36278ec4f93eea1dcfd9169f, type: 3}
+  rSoloTile: {fileID: 4800298893490477974, guid: 924726585dbfa744daebf4b88da5ac34, type: 3}
+  lSoloTile: {fileID: 4800298893490477974, guid: facbcf514c9409d43b76987666909a25, type: 3}
+  bSoloTile: {fileID: 4800298893490477974, guid: 6631ac3b39db9c744b4b85e91c176155, type: 3}
   dMapImage: {fileID: 164976290}
   distGradient:
     serializedVersion: 2
@@ -7661,10 +7665,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1076776577}
   m_HandleRect: {fileID: 316440820}
   m_Direction: 0
-  m_MinValue: 3
+  m_MinValue: 4
   m_MaxValue: 10
   m_WholeNumbers: 1
-  m_Value: 3
+  m_Value: 4
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

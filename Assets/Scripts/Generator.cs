@@ -28,6 +28,11 @@ public class Generator : MonoBehaviour
     [HideInInspector] public GameObject blTile;
     [HideInInspector] public GameObject bmTile;
     [HideInInspector] public GameObject brTile;
+
+    [SerializeField] public GameObject tSoloTile;
+    [SerializeField] public GameObject rSoloTile;
+    [SerializeField] public GameObject lSoloTile;
+    [SerializeField] public GameObject bSoloTile;
     #endregion
 
     private TileMap3D map;
@@ -192,7 +197,11 @@ public class Generator : MonoBehaviour
         GameObject tmGridTile = map.GetTile (new Vector2Int (x,   y+1));
         GameObject trGridTile = map.GetTile (new Vector2Int (x+1, y+1));
 
-        // we have 8 + 1 cases
+        //solo tiles
+        if (bmGridTile != null && mlGridTile == null && mrGridTile == null && tmGridTile == null) return tSoloTile;
+        if (tmGridTile != null && mlGridTile == null && mrGridTile == null && bmGridTile == null) return bSoloTile;
+        if (mrGridTile != null && tmGridTile == null && bmGridTile == null && mlGridTile == null) return lSoloTile;
+        if (mlGridTile != null && tmGridTile == null && bmGridTile == null && mrGridTile == null) return rSoloTile;
 		
         // left
         if (mlGridTile == null && tmGridTile == null) return tlTile;
@@ -207,7 +216,7 @@ public class Generator : MonoBehaviour
         if (mlGridTile != null && tmGridTile == null && mrGridTile == null) return trTile;
         if (tmGridTile != null && bmGridTile != null && mrGridTile == null) return mrTile;
         if (tmGridTile != null && bmGridTile == null && mrGridTile == null) return brTile;
-
+        
         return mmTile; // default case
     }
 
